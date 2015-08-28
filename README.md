@@ -61,7 +61,7 @@
 
 ##  Add book to the database
 * Each book must have:
-  * Title, author, isbn, pages, genre
+  * Title, author, isbn, pages, genre, image
 
 ##  Friends
 * Add friends
