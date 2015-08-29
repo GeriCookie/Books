@@ -19,12 +19,43 @@ function saveBook(book) {
   return promise;
 }
 
-function getAllBooks() {
+function getAllBooksLocalStorage() {
   var promise = new Promise(function(resolve, reject) {
     var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
     resolve(books);
   });
 
+  return promise;
+}
+
+//getBooks({genre: 'sci-fi', author: "...."})
+function getBooks(options) {
+  options = options || {};
+
+  var promise = new Promise(function(resolve, reject) {
+    var url = '/api/books',
+      queryParams = [],
+      isFirst = true;
+    for (var key in options) {
+      var concatSymbol = '&';
+      if (isFirst) {
+        concatSymbol = '?';
+        isFirst = false;
+      }
+      url += `${concatSymbol}${key.toLowerCase()}=${options[key].toLowerCase()}`;
+    };
+
+    $.ajax({
+      url: url,
+      contentType: 'application/json',
+      success: function(books) {
+        resolve(books);
+      },
+      error: function(err) {
+        reject(err);
+      }
+    });
+  });
   return promise;
 }
 
@@ -44,6 +75,7 @@ function getBookById(id) {
 }
 
 var books = {
+  filter: getBooks,
   save: saveBook,
   getAll: getAllBooks,
   getById: getBookById

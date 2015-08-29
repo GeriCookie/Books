@@ -10,12 +10,22 @@ var sammyApp = Sammy('#root', function() {
     data.books.getAll()
       .then(function(books) {
         //render books
+
       });
+  });
+
+  //localhost:3000/#/books/filter
+  this.get('#/books/filter', function() {
+    data.books.filter({
+      author: 'Richard Dawkins',
+      genre: 'science'
+    });
   });
 
   this.get('#/books/:id', function() {
     console.log('----Book with id', this.params['id']);
   });
+
 });
 
 $(function() {

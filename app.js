@@ -7,6 +7,14 @@ app.use('/', express.static(__dirname + '/public'));
 
 var books = [];
 app.get('/api/books', function(req, res) {
+  var query = {},
+    validParamNames = ['author', 'genre'];
+
+  for (var paramName in validParamNames) {
+    if (req.query[paramName]) {
+      query[paramName] = req.query[paramName];
+    }
+  }
   res.json({
     books
   });
