@@ -1,15 +1,41 @@
 import data from 'app/data/data';
 
-data.books.save({
-    title: 'Name of the Wind',
-    date: new Date()
-  })
-  .then(function(book) {
-    console.log('Book added:');
-    console.log(book);
-    return data.books.getById(1);
-  })
-  .then(function(book) {
-    console.log('Book found!');
-    console.log(book);
+var sammyApp = Sammy('#root', function() {
+
+  this.get('#/', function() {
+    console.log('----HOME');
   });
+
+  this.get('#/books', function() {
+    data.books.getAll()
+      .then(function(books) {
+        books
+          .renderEach('post.mustache')
+          .swap();
+
+
+      });
+  });
+
+  this.get('#/books/:id', function() {
+    console.log('----Book with id', this.params['id']);
+  });
+});
+
+$(function() {
+  sammyApp.run('#/');
+});
+
+// data.books.save({
+//     title: 'Name of the Wind',
+//     date: new Date()
+//   })
+//   .then(function(book) {
+//     console.log('Book added:');
+//     console.log(book);
+//     return data.books.getById(1);
+//   })
+//   .then(function(book) {
+//     console.log('Book found!');
+//     console.log(book);
+//   });
