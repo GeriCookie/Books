@@ -9,11 +9,7 @@ var sammyApp = Sammy('#root', function() {
   this.get('#/books', function() {
     data.books.getAll()
       .then(function(books) {
-        books
-          .renderEach('post.mustache')
-          .swap();
-
-
+        //render books
       });
   });
 
