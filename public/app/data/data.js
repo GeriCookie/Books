@@ -5,8 +5,8 @@ const KEYS = {
   LAST_BOOK_ID: 'books-last-id-key'
 };
 
-function saveBook(book) {
-  var promise = new Promise(function(resolve, reject) {
+function saveBookLocalStorage(book) {
+  var promise = new Promise(function (resolve, reject) {
     var lastBookId = +(localStorage.getItem(KEYS.LAST_BOOK_ID) || 0);
     var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
     book.id = lastBookId += 1;
@@ -19,8 +19,28 @@ function saveBook(book) {
   return promise;
 }
 
+function saveBook(book) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = 'api/books';
+
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: JSON.stringify(book),
+      contentType: 'application/json',
+      success: function (book) {
+        resolve(book);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
 function getAllBooksLocalStorage() {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
     resolve(books);
   });
@@ -32,7 +52,7 @@ function getAllBooksLocalStorage() {
 function getBooks(options) {
   options = options || {};
 
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = '/api/books',
       queryParams = [],
       isFirst = true;
@@ -43,15 +63,15 @@ function getBooks(options) {
         isFirst = false;
       }
       url += `${concatSymbol}${key.toLowerCase()}=${options[key].toLowerCase()}`;
-    };
+    }
 
     $.ajax({
       url: url,
       contentType: 'application/json',
-      success: function(books) {
+      success: function (books) {
         resolve(books);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
@@ -59,12 +79,12 @@ function getBooks(options) {
   return promise;
 }
 
-function getBookById(id) {
+function getBookByIdLocalStorage(id) {
   id = +id;
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
 
-    var book = books.find(function(dbBook) {
+    var book = books.find(function (dbBook) {
       return id === dbBook.id;
     });
 
@@ -74,10 +94,25 @@ function getBookById(id) {
   return promise;
 }
 
+function getBookById(id) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = '/api/books/' + id;
+
+    $.ajax({
+      url: url,
+      method: 'GET',
+      contentType: 'application/json',
+      success: function (book) {
+        resolve(book);
+      }
+    });
+  });
+  return promise;
+}
+
 var books = {
-  filter: getBooks,
+  get: getBooks,
   save: saveBook,
-  getAll: getAllBooks,
   getById: getBookById
 };
 

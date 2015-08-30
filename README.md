@@ -67,3 +67,14 @@
 * Add friends
 * Search for friends
   * By username
+
+
+
+##Pages
+
+* `#/books/add` -> Add book
+* `#/books` -> list all books
+* `#/books?author=XXXX` -> list all books of this author
+* `#/books?genre=XXXX` -> list all books of this genre
+* `#/books?author=XXXX&genre=YYYYY` -> list all books of this author and genre
+* `#/books/:id` -> Show book info

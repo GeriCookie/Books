@@ -1,36 +1,40 @@
 var express = require('express'),
-  bodyParser = require('body-parser');
+	bodyParser = require('body-parser');
+mongoose = require('mongoose');
+
+
+var db = mongoose.connect('mongodb://localhost/books');
+
+var Book = require('./models/bookModel');
 var app = express();
 
-app.use(bodyParser.json());
+var port = 3000;
+
+//needed for the client to work
+//  serves public dir to localhost
 app.use('/', express.static(__dirname + '/public'));
 
-var books = [];
-app.get('/api/books', function(req, res) {
-  var query = {},
-    validParamNames = ['author', 'genre'];
 
-  for (var paramName in validParamNames) {
-    if (req.query[paramName]) {
-      query[paramName] = req.query[paramName];
-    }
-  }
-  res.json({
-    books
-  });
+app.use(bodyParser.json());
+
+var bookRouter = require('./Routes/bookRoutes')(Book);
+app.use('/api/books', bookRouter);
+app.use('/api/authors', bookRouter);
+
+
+app.get('/api/genres', function (req, res) {
+	Book.find({}, function (err, books) {
+		var genres = {};
+		books.forEach(function (book) {
+			genres[book.genre] = true;
+		});
+		genres = Object.keys(genres);
+		res.json(genres);
+	});
 });
 
-var lastId = 0;
-app.post('/api/books', function(req, res) {
-  var book = req.body;
-
-  book.id = lastId += 1;
-  books.push(book);
-
-  res.status(201)
-    .json(book);
+app.listen(port, function () {
+	console.log('Running on PORT: ' + port);
 });
 
-app.listen(3000, function() {
-  console.log('listening at http://localhost:3000');
-});
+module.exports = app;
