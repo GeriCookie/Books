@@ -1,7 +1,11 @@
 <div data-id="{{_id}}">
-	<h1>Title: {{title}}</h1>
-	<p>Author:<a href="#/authors?author={{author}}">{{author}}</a></p>
-	<p>Genre: <a href="#/genres?genre={{genre}}">{{genre}}</a></p>
+	<h2><a href="#/books/{{_id}}">Title: {{title}}</a></h2>
+	<p>Author:<a href="#/books?author={{author}}">{{author}}</a></p>
+	<p>Genres:
+		{{#each genres}}
+			<a href="#/books?genre={{this}}">{{this}}</a>,
+		{{/each}}
+	 </p>
 	<p>Rating: {{rating}}</p>
 	<p>Description: {{description}}</p>
 	<p>Pages: {{pages}}</p>

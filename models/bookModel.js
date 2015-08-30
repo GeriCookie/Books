@@ -8,8 +8,8 @@ var bookModel = new Schema({
 	author: {
 		type: String
 	},
-	genre: {
-		type: String
+	genres: {
+		type: [String]
 	},
 	rating: {
 		type: Number

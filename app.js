@@ -26,7 +26,10 @@ app.get('/api/genres', function (req, res) {
 	Book.find({}, function (err, books) {
 		var genres = {};
 		books.forEach(function (book) {
-			genres[book.genre] = true;
+			book.genres.forEach(function (genre) {
+				genres[genre] = true;
+			});
+
 		});
 		genres = Object.keys(genres);
 		res.json(genres);

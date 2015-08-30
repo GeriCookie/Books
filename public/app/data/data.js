@@ -57,12 +57,16 @@ function getBooks(options) {
       queryParams = [],
       isFirst = true;
     for (var key in options) {
+      if (typeof options[key] === 'undefined') {
+        continue;
+      }
+
       var concatSymbol = '&';
       if (isFirst) {
         concatSymbol = '?';
         isFirst = false;
       }
-      url += `${concatSymbol}${key.toLowerCase()}=${options[key].toLowerCase()}`;
+      url += `${concatSymbol}${key}=${options[key]}`;
     }
 
     $.ajax({

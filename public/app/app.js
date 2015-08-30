@@ -8,7 +8,12 @@ var sammyApp = Sammy('#root', function () {
   });
 
   this.get('#/books', function () {
-    data.books.get()
+    var params = {
+      author: this.params.author,
+      genre: this.params.genre,
+    };
+
+    data.books.get(params)
       .then(function (books) {
         var $container = $('<div />');
         $.get('app/partials/book-id-partial.html', function (templateString) {
@@ -23,6 +28,7 @@ var sammyApp = Sammy('#root', function () {
   });
 
 
+
   this.get('#/books/add', function (context) {
     //context === this
 
@@ -31,10 +37,17 @@ var sammyApp = Sammy('#root', function () {
 
     var $button = $('#root')
       .on('click', '#add-book', function () {
+        var genres = [];
+        $('.tb-genre').each(function (index, genre) {
+          var value = $(genre).val();
+          if (value) {
+            genres.push(value);
+          }
+        });
         data.books.save({
             title: $('#tb-title').val(),
             author: $('#tb-author').val(),
-            genre: $('#tb-genre').val(),
+            genres: genres,
             description: $('#tb-description').val(),
             pages: $('#tb-pages').val(),
 
@@ -45,15 +58,6 @@ var sammyApp = Sammy('#root', function () {
       });
 
   });
-
-  //localhost:3000/#/books/filter
-  this.get('#/books/filter', function () {
-    data.books.filter({
-      author: 'Richard Dawkins',
-      genre: 'science'
-    });
-  });
-
 
   this.get('#/books/:id', function (context) {
     var that = this;
@@ -71,7 +75,6 @@ var sammyApp = Sammy('#root', function () {
   this.get('#/genres', function () {
     var genre = this.params.genre;
 
-    console.log(genre);
     // data.books.getBooks({
     //     genre: genre
     //   })
