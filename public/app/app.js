@@ -1,7 +1,7 @@
 import data from 'app/data/data';
 import handlebars from 'bower_components/handlebars/handlebars';
 
-var sammyApp = Sammy('#root', function () {
+var sammyApp = Sammy('#content', function () {
 
   this.get('#/', function () {
     console.log('----HOME');
@@ -22,7 +22,7 @@ var sammyApp = Sammy('#root', function () {
             .forEach(function (bookhtml) {
               $container.append(bookhtml);
             });
-          $('#root').html($container.html());
+          $('#content').html($container.html());
         });
       });
   });
@@ -35,7 +35,7 @@ var sammyApp = Sammy('#root', function () {
     this.load('app/partials/book-add-partial.html')
       .swap();
 
-    var $button = $('#root')
+    var $button = $('#content')
       .on('click', '#add-book', function () {
         var genres = [];
         $('.tb-genre').each(function (index, genre) {
@@ -67,7 +67,7 @@ var sammyApp = Sammy('#root', function () {
         $.get('app/partials/book-id-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           var html = template(book);
-          $('#root').html(html);
+          $('#content').html(html);
         });
       });
   });
