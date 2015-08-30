@@ -1,23 +1,5 @@
 import 'app/polyfills/array';
 
-const KEYS = {
-  BOOKS: 'books-storage-key',
-  LAST_BOOK_ID: 'books-last-id-key'
-};
-
-function saveBookLocalStorage(book) {
-  var promise = new Promise(function (resolve, reject) {
-    var lastBookId = +(localStorage.getItem(KEYS.LAST_BOOK_ID) || 0);
-    var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
-    book.id = lastBookId += 1;
-    books.push(book);
-    localStorage.setItem(KEYS.BOOKS, JSON.stringify(books));
-    localStorage.setItem(KEYS.LAST_BOOK_ID, lastBookId);
-    resolve(book);
-  });
-
-  return promise;
-}
 
 function saveBook(book) {
   var promise = new Promise(function (resolve, reject) {
@@ -36,15 +18,6 @@ function saveBook(book) {
       }
     });
   });
-  return promise;
-}
-
-function getAllBooksLocalStorage() {
-  var promise = new Promise(function (resolve, reject) {
-    var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
-    resolve(books);
-  });
-
   return promise;
 }
 
@@ -83,20 +56,6 @@ function getBooks(options) {
   return promise;
 }
 
-function getBookByIdLocalStorage(id) {
-  id = +id;
-  var promise = new Promise(function (resolve, reject) {
-    var books = JSON.parse(localStorage.getItem(KEYS.BOOKS) || '[]');
-
-    var book = books.find(function (dbBook) {
-      return id === dbBook.id;
-    });
-
-    resolve(book);
-  });
-
-  return promise;
-}
 
 function getBookById(id) {
   var promise = new Promise(function (resolve, reject) {
@@ -114,15 +73,56 @@ function getBookById(id) {
   return promise;
 }
 
+function getGenres() {
+  var promise = new Promise(function (resolve, reject) {
+    var url = '/api/genres';
+
+    $.ajax({
+      url: url,
+      method: 'GET',
+      contentType: 'application/json',
+      success: function (genres) {
+        resolve(genres);
+      }
+    });
+  });
+  return promise;
+}
+
+function editBook(book) {
+  var promise = new Promise(function (resolve, reject) {
+
+    var url = '/api/books/' + book.id;
+    console.log(book);
+    $.ajax({
+      url: url,
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(book),
+      success: function (resBook) {
+        resolve(resBook);
+      }
+    });
+  });
+
+  return promise;
+}
+
 var books = {
   get: getBooks,
   save: saveBook,
-  getById: getBookById
+  getById: getBookById,
+  edit: editBook
 };
 
+var genres = {
+  get: getGenres
+};
 export {
-  books
+  books,
+  genres
 };
 export default {
-  books
+  books,
+  genres
 };

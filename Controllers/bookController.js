@@ -6,6 +6,12 @@ var bookController = function (Book) {
 		if (!req.body.title) {
 			res.status(400);
 			res.send('Title is required');
+		} else if (!req.body.author) {
+			res.status(400);
+			res.send('Author is required');
+		} else if (Array.isArray(req.body.genres) || req.body.genres.length === 0) {
+			res.status(400);
+			res.send('Genre is required');
 		} else {
 			book.save(function (err, result) {
 				if (err) {

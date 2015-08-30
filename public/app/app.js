@@ -49,7 +49,7 @@ var sammyApp = Sammy('#content', function () {
             author: $('#tb-author').val(),
             genres: genres,
             description: $('#tb-description').val(),
-            pages: $('#tb-pages').val(),
+            pages: $('#tb-pages').val()
 
           })
           .then(function (book) {
@@ -57,6 +57,43 @@ var sammyApp = Sammy('#content', function () {
           });
       });
 
+  });
+
+  this.get('#/books/:id/edit', function (context) {
+    var bookId = this.params.id;
+    data.books.getById(bookId)
+      .then(function (book) {
+        $.get('app/partials/book-edit-partial.html', function (templateString) {
+          var template = handlebars.compile(templateString);
+          var html = template(book);
+          $('#content').html(html);
+
+          $('#save')
+            .on('click', function () {
+
+              var genres = [];
+              $('.tb-genre').each(function (index, genre) {
+                var value = $(genre).val();
+                if (value) {
+                  genres.push(value);
+                }
+              });
+              data.books.edit({
+                  id: bookId,
+                  title: $('#tb-title').val(),
+                  author: $('#tb-author').val(),
+                  genres: genres,
+                  rating: $('#tb-rating').val(),
+                  description: $('#tb-description').val(),
+                  pages: $('#tb-pages').val()
+                })
+                .then(function (book) {
+                  context.redirect('#/books/' + book._id);
+                });
+            });
+
+        });
+      });
   });
 
   this.get('#/books/:id', function (context) {
@@ -74,23 +111,18 @@ var sammyApp = Sammy('#content', function () {
 
   this.get('#/genres', function () {
     var genre = this.params.genre;
+    data.genres.get()
+      .then(function (genres) {
+        var $container = $('<div />');
+        $.get('app/partials/genres-all-partial.html', function (templateString) {
+          var template = handlebars.compile(templateString);
 
-    // data.books.getBooks({
-    //     genre: genre
-    //   })
-    //   .then(function (books) {
-    //     var $list = $('<ul />');
-    //     books.forEach(function (book) {
-    //       $('<li/>')
-    //         .append(book.title)
-    //         .append(
-    //           $('<a/>')
-    //           .attr('href', '#/genres?genre=' + book.genre)
-    //           .html(book.genre)
-    //         )
-    //         .appendTo($list);
-    //     });
-    //   });
+          var html = template({
+            genres
+          });
+          $('#content').html(html);
+        });
+      });
   });
 });
 
