@@ -47,6 +47,7 @@ var sammyApp = Sammy('#content', function () {
           });
           data.books.save({
               title: $('#tb-title').val(),
+              //cover: $('#tb-cover').data(),
               author: $('#tb-author').val(),
               genres: genres,
               description: $('#tb-description').val(),
@@ -57,6 +58,24 @@ var sammyApp = Sammy('#content', function () {
               context.redirect('#/books/' + book._id);
             });
         });
+        
+        var $uploadButton = $('#btn-load-cover')
+            .on('click', function () {
+                $('#btn-hidden').click();
+                //$('#tb-cover').css('display', 'block');
+
+                $('#btn-hidden').change(function (input) {
+                    if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                    document.getElementById('tb-cover').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    }
+                    document.getElementById('tb-cover').style.display = 'block';
+                })
+                });
+
     });
   });
 
