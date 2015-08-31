@@ -10,7 +10,7 @@ var sammyApp = Sammy('#content', function () {
   this.get('#/books', function () {
     var params = {
       author: this.params.author,
-      genre: this.params.genre,
+      genre: this.params.genre
     };
 
     data.books.get(params)

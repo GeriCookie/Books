@@ -1,6 +1,96 @@
 import 'app/polyfills/array';
 
+//users
+function saveUser(user) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = 'api/users';
 
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: JSON.stringify(user),
+      contentType: 'application/json',
+      success: function (user) {
+        resolve(book);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
+function getUsers(user) {
+  var options = options | {},
+    promise = new Promise(function (resolve, reject) {
+      var url = '/api/users',
+        queryParams = [],
+        isFirst = true;
+      for (var key in options) {
+        if (typeof options[key] === 'undefined') {
+          continue;
+        }
+
+        var concatSymbol = '&';
+        if (isFirst) {
+          concatSymbol = '?';
+          isFirst = false;
+        }
+        url += `${concatSymbol}${key}=${options[key]}`;
+      }
+
+      $.ajax({
+        url: url,
+        contentType: 'application/json',
+        success: function (users) {
+          resolve(users);
+        },
+        error: function (err) {
+          reject(err);
+        }
+      });
+    });
+  return promise;
+}
+
+function getUserById(id) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = 'api/users/' + id;
+
+    $.ajax({
+      url: url,
+      contentType: 'application/json',
+      success: function (user) {
+        resolve(user);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
+function editUser(user) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = '/api/users/' + user.id;
+
+    $.ajax({
+      url: url,
+      method: 'PUT',
+      data: JSON.stringify(user),
+      contentType: 'application/json',
+      success: function (user) {
+        resolve(user);
+      }
+    });
+  });
+  return promise;
+}
+
+
+//books
 function saveBook(book) {
   var promise = new Promise(function (resolve, reject) {
     var url = 'api/books';
@@ -56,7 +146,6 @@ function getBooks(options) {
   return promise;
 }
 
-
 function getBookById(id) {
   var promise = new Promise(function (resolve, reject) {
     var url = '/api/books/' + id;
@@ -93,7 +182,7 @@ function editBook(book) {
   var promise = new Promise(function (resolve, reject) {
 
     var url = '/api/books/' + book.id;
-    console.log(book);
+
     $.ajax({
       url: url,
       method: 'PUT',
@@ -115,14 +204,23 @@ var books = {
   edit: editBook
 };
 
+var users = {
+  get: getUser,
+  save: saveUser,
+  getById: getUserById,
+  edit: editUser
+};
+
 var genres = {
   get: getGenres
 };
 export {
   books,
-  genres
+  genres,
+  users
 };
 export default {
   books,
-  genres
+  genres,
+  users
 };

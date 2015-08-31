@@ -6,6 +6,7 @@ mongoose = require('mongoose');
 var db = mongoose.connect('mongodb://localhost/books');
 
 var Book = require('./models/bookModel');
+var User = require('./models/userModel');
 var app = express();
 
 var port = 3000;
@@ -18,8 +19,10 @@ app.use('/', express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 var bookRouter = require('./Routes/bookRoutes')(Book);
+var userRouter = require('./Routes/userRoutes')(User);
 app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
+app.use('/api/users', userRouter);
 
 
 app.get('/api/genres', function (req, res) {
