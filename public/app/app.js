@@ -32,31 +32,32 @@ var sammyApp = Sammy('#content', function () {
   this.get('#/books/add', function (context) {
     //context === this
 
-    this.load('app/partials/book-add-partial.html')
-      .swap();
+    $.get('app/partials/book-add-partial.html', function (html) {
+      // body...
+      $('#content').html(html);
 
-    var $button = $('#content')
-      .on('click', '#add-book', function () {
-        var genres = [];
-        $('.tb-genre').each(function (index, genre) {
-          var value = $(genre).val();
-          if (value) {
-            genres.push(value);
-          }
-        });
-        data.books.save({
-            title: $('#tb-title').val(),
-            author: $('#tb-author').val(),
-            genres: genres,
-            description: $('#tb-description').val(),
-            pages: $('#tb-pages').val()
-
-          })
-          .then(function (book) {
-            context.redirect('#/books/' + book._id);
+      var $button = $('#add-book')
+        .on('click', function () {
+          var genres = [];
+          $('.tb-genre').each(function (index, genre) {
+            var value = $(genre).val();
+            if (value) {
+              genres.push(value);
+            }
           });
-      });
+          data.books.save({
+              title: $('#tb-title').val(),
+              author: $('#tb-author').val(),
+              genres: genres,
+              description: $('#tb-description').val(),
+              pages: $('#tb-pages').val()
 
+            })
+            .then(function (book) {
+              context.redirect('#/books/' + book._id);
+            });
+        });
+    });
   });
 
   this.get('#/books/:id/edit', function (context) {
