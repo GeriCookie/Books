@@ -5,7 +5,7 @@ var routes = function (User) {
 
 	var userController = require('../Controllers/userController')(User);
 
-	userController.route('/')
+	userRouter.route('/')
 		.post(userController.post)
 		.get(userController.get);
 

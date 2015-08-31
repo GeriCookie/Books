@@ -21,7 +21,7 @@ function saveUser(user) {
   return promise;
 }
 
-function getUsers(user) {
+function getUser(user) {
   var options = options | {},
     promise = new Promise(function (resolve, reject) {
       var url = '/api/users',
@@ -219,6 +219,7 @@ export {
   genres,
   users
 };
+
 export default {
   books,
   genres,
