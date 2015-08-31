@@ -22,7 +22,7 @@ function saveUser(user) {
 }
 
 function getUser(user) {
-  var options = options | {},
+  var options = options || {},
     promise = new Promise(function (resolve, reject) {
       var url = '/api/users',
         queryParams = [],
