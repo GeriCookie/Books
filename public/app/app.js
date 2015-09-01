@@ -58,24 +58,23 @@ var sammyApp = Sammy('#content', function () {
               context.redirect('#/books/' + book._id);
             });
         });
-        
+
         var $uploadButton = $('#btn-load-cover')
             .on('click', function () {
                 $('#btn-hidden').click();
-                //$('#tb-cover').css('display', 'block');
 
-                $('#btn-hidden').change(function (input) {
-                    if (input.files && input.files[0]) {
+                $('#btn-hidden').on('change', function () {
+                    var file = $('#btn-hidden')[0].files[0];
                     var reader = new FileReader();
-                    reader.onload = function (e) {
-                    document.getElementById('tb-cover').src = e.target.result;
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                    }
-                    document.getElementById('tb-cover').style.display = 'block';
-                })
-                });
 
+                    reader.onload = function () {
+                    $('#tb-cover').attr('src', reader.result);
+                    };
+                    reader.readAsDataURL(file);
+
+                    $('#tb-cover').css('display', 'block');
+                    })
+                });
     });
   });
 
