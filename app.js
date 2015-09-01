@@ -23,7 +23,21 @@ var userRouter = require('./Routes/userRoutes')(User);
 app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
 app.use('/api/users', userRouter);
-
+app.use('/', function (req, res, next) {
+	var authKey = req.headers['x-auth-key'];
+	if (!authKey) {
+		next();
+		return ();
+	}
+	User.find({
+			authKey: authKey
+		})
+		.then(function (users) {
+			var user = users[0];
+			req.user = user || null;
+			next();
+		});
+});
 
 app.get('/api/genres', function (req, res) {
 	Book.find({}, function (err, books) {

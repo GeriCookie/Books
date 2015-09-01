@@ -27,6 +27,35 @@ var sammyApp = Sammy('#content', function () {
       });
   });
 
+  this.get('#/login', function (context) {
+    $.get('app/partials/login-partial.html', function (html) {
+      $('#content').html(html);
+
+      $('#sign-in').on('click', function () {
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        data.users.save({
+            username: username,
+            password: password
+          })
+          .then(function (user) {
+            console.log(user.username + 'saved');
+          });
+      });
+
+      $('#register').on('click', function () {
+
+      });
+
+    });
+  });
+
+  this.get('#/register', function (context) {
+    $.get('app/partials/register-partial.html', function (html) {
+
+    });
+  });
 
 
   this.get('#/books/add', function (context) {
@@ -58,23 +87,23 @@ var sammyApp = Sammy('#content', function () {
               context.redirect('#/books/' + book._id);
             });
         });
-        
-        var $uploadButton = $('#btn-load-cover')
-            .on('click', function () {
-                $('#btn-hidden').click();
-                //$('#tb-cover').css('display', 'block');
 
-                $('#btn-hidden').change(function (input) {
-                    if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                    document.getElementById('tb-cover').src = e.target.result;
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                    }
-                    document.getElementById('tb-cover').style.display = 'block';
-                })
-                });
+      var $uploadButton = $('#btn-load-cover')
+        .on('click', function () {
+          $('#btn-hidden').click();
+          //$('#tb-cover').css('display', 'block');
+
+          $('#btn-hidden').change(function (input) {
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                document.getElementById('tb-cover').src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+            }
+            document.getElementById('tb-cover').style.display = 'block';
+          })
+        });
 
     });
   });

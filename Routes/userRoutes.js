@@ -40,7 +40,7 @@ var routes = function (User) {
 				if (err) {
 					res.status(500).send(err);
 				} else {
-					res.json(req.user)
+					res.json(req.user);
 				}
 			});
 		})

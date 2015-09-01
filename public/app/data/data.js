@@ -1,5 +1,7 @@
 import 'app/polyfills/array';
+import 'bower_components/sha1/index';
 
+//console.log(CryptoJS.SHA1('Cookie').toString());
 //users
 function saveUser(user) {
   var promise = new Promise(function (resolve, reject) {
