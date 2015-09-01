@@ -27,6 +27,35 @@ var sammyApp = Sammy('#content', function () {
       });
   });
 
+  this.get('#/login', function (context) {
+    $.get('app/partials/login-partial.html', function (html) {
+      $('#content').html(html);
+
+      $('#sign-in').on('click', function () {
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        data.users.save({
+            username: username,
+            password: password
+          })
+          .then(function (user) {
+            console.log(user.username + 'saved');
+          });
+      });
+
+      $('#register').on('click', function () {
+
+      });
+
+    });
+  });
+
+  this.get('#/register', function (context) {
+    $.get('app/partials/register-partial.html', function (html) {
+
+    });
+  });
 
 
   this.get('#/books/add', function (context) {
