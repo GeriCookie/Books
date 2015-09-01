@@ -1,19 +1,59 @@
 import 'app/polyfills/array';
 import 'bower_components/sha1/index';
 
-//console.log(CryptoJS.SHA1('Cookie').toString());
+console.log(CryptoJS.SHA1('Cookie').toString());
+console.log(CryptoJS.SHA1('Cookie').toString());
 //users
-function saveUser(user) {
+function registerUser(user) {
   var promise = new Promise(function (resolve, reject) {
     var url = 'api/users';
-
+    var pass = user.password;
+    var passHash = CryptoJS.SHA1(pass).toString();
+    console.log(passHash);
+    var userSend = {
+      username: user.username,
+      passHash: passHash
+    };
+    console.log(userSend);
     $.ajax({
       url: url,
       method: 'POST',
-      data: JSON.stringify(user),
+      data: JSON.stringify(userSend),
       contentType: 'application/json',
       success: function (user) {
-        resolve(book);
+        resolve(user);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
+function loginUser(user) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = '/api/users/auth';
+    var pass = user.password;
+    var passHash = CryptoJS.SHA1(pass).toString();
+    var userSend = {
+      username: user.username,
+      passHash: passHash
+    };
+    var authKey = localStorage.getItem('auth-key'),
+      username = localStorage.getItem('username');
+
+    $.ajax({
+      url: url,
+      method: 'PUT',
+      data: JSON.stringify(userSend),
+      contentType: 'application/json',
+      success: function (user) {
+        username = user.username;
+        authKey = user.authKey;
+        localStorage.setItem('username', username);
+        localStorage.setItem('auth-key', authKey);
+        resolve(user);
       },
       error: function (err) {
         reject(err);
@@ -208,9 +248,10 @@ var books = {
 
 var users = {
   get: getUser,
-  save: saveUser,
+  register: registerUser,
   getById: getUserById,
-  edit: editUser
+  edit: editUser,
+  login: loginUser
 };
 
 var genres = {

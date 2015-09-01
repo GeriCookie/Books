@@ -9,6 +9,35 @@ var routes = function (User) {
 		.post(userController.post)
 		.get(userController.get);
 
+	userRouter.route('/auth')
+		.put(function (req, res) {
+			var username = req.body.username,
+				passHash = req.body.passHash,
+				query = {
+					username: username.toLowerCase()
+				};
+
+
+			User.findOne(query, function (err, user) {
+				console.log(user);
+				console.log(user.passHash === passHash);
+				if (err) {
+					throw err;
+				} else if (user) {
+					if (user.passHash === passHash) {
+						res.json({
+							username: user.nickname,
+							authKey: user.authKey
+						});
+					}
+				} else {
+					res.status(404).json({
+						err: 'user not found'
+					});
+				}
+			});
+		});
+
 	userRouter.use('/:userId', function (req, res, next) {
 		User.findById(req.params.userId, function (err, user) {
 			if (err) {

@@ -2,7 +2,7 @@ require('../polyfills/array');
 var userController = function (User) {
 	var post = function (req, res) {
 		var username = req.body.username,
-			passHash = req.body.passhash,
+			passHash = req.body.passHash,
 			query = {
 				username: username.toLowerCase()
 			};
@@ -33,6 +33,7 @@ var userController = function (User) {
 					return authKey;
 				}(username))
 			});
+			console.log(user);
 			user.save(function (err, user) {
 				if (err) throw err;
 				res.status(201)
@@ -45,15 +46,17 @@ var userController = function (User) {
 	};
 
 	var get = function (req, res) {
-		var query = {};
+		if (!req.user) {
+			res.status(404)
+				.json({
+					err: 'User not logged in'
+				});
+		}
 
-		User.find(query, function (err, users) {
-			if (err) {
-				res.status(500).send(err);
-			} else {
+		User.find()
+			.then(function (users) {
 				res.json(users);
-			}
-		});
+			});
 	};
 
 	return {

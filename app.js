@@ -24,10 +24,11 @@ app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
 app.use('/api/users', userRouter);
 app.use('/', function (req, res, next) {
+	console.log(req.headers['x-auth-key']);
 	var authKey = req.headers['x-auth-key'];
 	if (!authKey) {
 		next();
-		return ();
+		return;
 	}
 	User.find({
 			authKey: authKey

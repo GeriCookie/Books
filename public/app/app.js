@@ -35,17 +35,18 @@ var sammyApp = Sammy('#content', function () {
         var username = $('#username').val();
         var password = $('#password').val();
 
-        data.users.save({
+        data.users.login({
             username: username,
             password: password
           })
           .then(function (user) {
             console.log(user.username + 'saved');
+            context.redirect('#/books');
           });
       });
 
       $('#register').on('click', function () {
-
+        context.redirect('#/register');
       });
 
     });
@@ -53,7 +54,21 @@ var sammyApp = Sammy('#content', function () {
 
   this.get('#/register', function (context) {
     $.get('app/partials/register-partial.html', function (html) {
+      $('#content').html(html);
 
+      $('#register').on('click', function () {
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        data.users.register({
+            username: username,
+            password: password
+          })
+          .then(function (user) {
+            console.log('User' + user.username + 'registered');
+            context.redirect('#/login');
+          });
+      });
     });
   });
 
@@ -102,7 +117,7 @@ var sammyApp = Sammy('#content', function () {
               reader.readAsDataURL(input.files[0]);
             }
             document.getElementById('tb-cover').style.display = 'block';
-          })
+          });
         });
 
     });
