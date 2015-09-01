@@ -1,62 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../bootstrap.min.css">
-</head>
-<body>
-<label for="">Title: <input type="text" id="tb-title"></label><br>
-<label for="">Author: <input type="text" id="tb-author"></label><br>
-<label for="">Genres: <input type="text" class="tb-genre"><br>
-    <input type="text" class="tb-genre"><br>
-    <input type="text" class="tb-genre"></label><br>
-<label for="">Description: <input type="text" id="tb-description"></label><br>
-<label for="">Number of pages: <input type="text" id="tb-pages"></label><br>
-<label>Load book cover:</label>
-<input class="btn btn-primary" type="button" id="btn-load-cover" value="Choose file">
-<input type="file" style="display:none" id="btn-hidden" onchange="readURL(this);"><br>
-<img src="" height="200" style="display:none" id="tb-cover"><br>
+<label for="tb-title">Title: </label><input type="text" id="tb-title"><br>
+<label for="tb-author">Author: </label><input type="text" id="tb-author"><br>
+<label for="tb-genre">Genres:<input type="text" class="tb-genre" id="tb-genre">
+    <input type="text" class="tb-genre">
+    <input type="text" class="tb-genre"> </label><br>
+<label for="tb-description">Description: </label><input type="text" id="tb-description"><br>
+<label for="tb-pages">Number of pages: </label><input type="text" id="tb-pages"><br>
+<label for="tb-cover-url">Enter url of book cover: </label>
+<input type="text" id="tb-cover-url" placeholder="Url of image..">
+<input type="button" value="Preview image" id="tb-btn-preview" class="btn btn-primary"><br>
+<img src="" height="200" id="tb-cover"><br>
 <button id="add-book">Add book</button>
-
-<script>
-    $('#btn-load-cover')
-            .on('click', function () {
-                $('#btn-hidden').click();
-            });
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                document.getElementById('tb-cover').src = e.target.result;
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-        document.getElementById("tb-cover").style.display = "block";
-    }
-
-    //saving image
-    bannerImage = document.getElementById('tb-cover');
-    imgData = getBase64Image(bannerImage);
-    localStorage.setItem("imgData", imgData);
-
-    function getBase64Image(img) {
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-
-        var dataURL = canvas.toDataURL("image/png");
-
-        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    }
-
-    var dataImage = localStorage.getItem('imgData');
-//    bannerImg = document.getElementById('tableBanner');
-//    bannerImg.src = "data:image/png;base64," + dataImage;
-</script>

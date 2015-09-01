@@ -1,22 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../../AdditionalStyles.css">
-</head>
-
 <div data-id="{{_id}}">
-	<h2><a href="#/books/{{_id}}" class="button">Title: {{title}}</a></h2>
-	<p>Author:<a href="#/books?author={{author}}" class="button">{{author}}</a></p>
-	<p>Genres:
-		{{#each genres}}
-			<a href="#/books?genre={{this}}" class="button">{{this}}</a>
-		{{/each}}
-	 </p>
-	<p>Rating: {{rating}}</p>
-	<p>Description: {{description}}</p>
-	<p>Pages: {{pages}}</p>
-	<p>Reviews: {{reviews}}</p>
-	<a href="#/books/{{_id}}/edit" class="btn btn-default">Edit book</a>
+    <h2><a href="#/books/{{_id}}" class="button">Title: {{title}}</a></h2>
+    <img src="{{coverUrl}}" alt="The book has no cover" height="200">
+
+    <p>Author:<a href="#/books?author={{author}}" class="button">{{author}}</a></p>
+
+    <p>Genres:
+        {{#each genres}}
+        <a href="#/books?genre={{this}}" class="button">{{this}}</a>
+        {{/each}}
+    </p>
+
+    <p>Rating: {{rating}}</p>
+
+    <p>Description: {{description}}</p>
+
+    <p>Pages: {{pages}}</p>
+
+    <p>Reviews: {{reviews}}</p>
+    <a href="#/books/{{_id}}/edit" class="btn btn-default">Edit book</a>
 </div>
