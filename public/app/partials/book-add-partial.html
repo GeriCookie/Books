@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../bootstrap.min.css">
-</head>
-<body>
 <label for="">Title: <input type="text" id="tb-title"></label><br>
 <label for="">Author: <input type="text" id="tb-author"></label><br>
 <label for="">Genres: <input type="text" class="tb-genre"><br>
@@ -19,44 +12,3 @@
 <img src="" height="200" style="display:none" id="tb-cover"><br>
 <button id="add-book">Add book</button>
 
-<script>
-    $('#btn-load-cover')
-            .on('click', function () {
-                $('#btn-hidden').click();
-            });
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                document.getElementById('tb-cover').src = e.target.result;
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-        document.getElementById("tb-cover").style.display = "block";
-    }
-
-    //saving image
-    bannerImage = document.getElementById('tb-cover');
-    imgData = getBase64Image(bannerImage);
-    localStorage.setItem("imgData", imgData);
-
-    function getBase64Image(img) {
-        var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-
-        var dataURL = canvas.toDataURL("image/png");
-
-        return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    }
-
-    var dataImage = localStorage.getItem('imgData');
-//    bannerImg = document.getElementById('tableBanner');
-//    bannerImg.src = "data:image/png;base64," + dataImage;
-</script>
