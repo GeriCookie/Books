@@ -1,20 +1,63 @@
 import 'app/polyfills/array';
-
+import 'bower_components/sha1/index';
 //users
-function saveUser(user) {
+function registerUser(user) {
   var promise = new Promise(function (resolve, reject) {
     var url = 'api/users';
+    var pass = user.password;
+    var passHash = CryptoJS.SHA1(pass).toString();
+
+    var userSend = {
+      username: user.username,
+      passHash: passHash
+    };
 
     $.ajax({
       url: url,
       method: 'POST',
-      data: JSON.stringify(user),
+      data: JSON.stringify(userSend),
       contentType: 'application/json',
       success: function (user) {
         resolve(user);
       },
       error: function (err) {
+        resolve(err);
+      }
+    });
+  });
+  return promise;
+}
+
+function loginUser(user) {
+  var promise = new Promise(function (resolve, reject) {
+    var url = 'api/users/auth';
+    var pass = user.password;
+    var passHash = CryptoJS.SHA1(pass).toString();
+    var userSend = {
+      username: user.username,
+      passHash: passHash
+    };
+
+    var authKey = localStorage.getItem('auth-key'),
+      username = localStorage.getItem('username');
+
+    $.ajax({
+      url: url,
+      method: 'PUT',
+      data: JSON.stringify(userSend),
+      contentType: 'application/json',
+      success: function (user) {
+        username = user.username;
+        authKey = user.authKey;
+        localStorage.setItem('username', username);
+        localStorage.setItem('auth-key', authKey);
+        console.log('in success');
+        resolve(user);
+      },
+      error: function (err) {
+        console.log('in error');
         reject(err);
+
       }
     });
   });
@@ -206,7 +249,8 @@ var books = {
 
 var users = {
   get: getUser,
-  save: saveUser,
+  register: registerUser,
+  login: loginUser,
   getById: getUserById,
   edit: editUser
 };

@@ -9,6 +9,31 @@ var routes = function (User) {
 		.post(userController.post)
 		.get(userController.get);
 
+	userRouter.route('/auth')
+		.put(function (req, res) {
+			var username = req.body.username,
+				passHash = req.body.passHash,
+				query = {
+					username: username.toLowerCase()
+				};
+
+			User.findOne(query, function (err, user) {
+				if (err) {
+					res.send(404);
+				} else if (user.passHash === passHash) {
+					var userSend = {
+						username: user.nickname,
+						authKey: user.authKey
+					};
+
+					res.json(userSend);
+				} else {
+					res.sendStatus(404);
+				}
+			});
+
+		});
+
 	userRouter.use('/:userId', function (req, res, next) {
 		User.findById(req.params.userId, function (err, user) {
 			if (err) {

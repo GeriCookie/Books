@@ -6,7 +6,13 @@ var userModel = new Schema({
 	username: {
 		type: String
 	},
-	password: {
+	nickname: {
+		type: String
+	},
+	passHash: {
+		type: String
+	},
+	authKey: {
 		type: String
 	},
 	booksToRead: {
