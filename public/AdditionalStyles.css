@@ -1,7 +1,12 @@
 div p a:after {
-    content: ',';
+  content: ',';
 }
-
 div p a:last-of-type:after {
-    content: '';
+  content: '';
+}
+.book-title > small {
+  display: none;
+}
+.book-title:hover > small {
+  display: inline
 }

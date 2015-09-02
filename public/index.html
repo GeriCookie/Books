@@ -6,6 +6,7 @@
   <title>Books</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../AdditionalStyles.css">
+  <link rel="stylesheet" href="bower_components/toastr/toastr.css">
 </head>
 
 <body>
@@ -54,7 +55,8 @@
         '*': '*.js'
       },
       map: {
-        babel: './libs/browser.min.js'
+        babel: './libs/browser.min.js',
+        toastr: 'bower_components/toastr/toastr'
       }
     });
     System.import('app/app')

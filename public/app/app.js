@@ -1,3 +1,5 @@
+import toastr from 'toastr';
+
 import data from 'app/data/data';
 import handlebars from 'bower_components/handlebars/handlebars';
 
