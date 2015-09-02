@@ -70,21 +70,34 @@ var sammyApp = Sammy('#content', function() {
     $.get('app/partials/register-partial.html', function(html) {
       $('#content').html(html);
 
-      $('#register').on('click', function() {
+      $('#register-form').on('submit', function() {
         var username = $('#username').val();
         var password = $('#password').val();
+        var confirmPassword = $('#confirm-password').val();
+        var email = $('#email').val();
 
+        if (password !== confirmPassword) {
+          $('.wrong-confirm-password').show();
+          $('.wrong-confirm-password').parent().addClass('has-error');
+          return;
+        }
+
+        if (!password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{4,})$/)) {
+          $('.wrong-password').show();
+          $('.wrong-password').parent().addClass('has-error');
+          return;
+        }
 
         data.users.register({
-            username: username,
-            password: password
-          })
-          .then(function(user) {
-            context.redirect('#/login');
-          }, function(err) {
-            alert(JSON.stringify(err));
-          });
-
+          username: username,
+          password: password,
+          email: email
+        })
+        .then(function (user) {
+          context.redirect('#/login');
+        }, function (err) {
+          alert(JSON.stringify(err));
+        });
       });
     });
   });
