@@ -1,7 +1,7 @@
 require('../polyfills/array');
 
-var myBooksController = function(User, Book, Update) {
-  var put = function(req, res) {
+var myBooksController = function (User, Book, Update) {
+  var put = function (req, res) {
     var user = req.user;
 
     if (!user) {
@@ -16,7 +16,7 @@ var myBooksController = function(User, Book, Update) {
       bookId: req.body.bookId,
       bookStatus: req.body.bookStatus
     };
-    Book.findById(obj.bookId, function(err, book) {
+    Book.findById(obj.bookId, function (err, book) {
       if (err) {
         // res.status(500).json(err);
         throw err;
@@ -30,8 +30,8 @@ var myBooksController = function(User, Book, Update) {
 
       var oldStatus = 'not reading';
 
-      ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function(name) {
-        var index = user[name].findIndex(function(myBook) {
+      ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function (name) {
+        var index = user[name].findIndex(function (myBook) {
           return myBook.id === book._id.toString();
         });
         if (index >= 0) {
@@ -59,7 +59,7 @@ var myBooksController = function(User, Book, Update) {
         booksToRead: user.booksToRead,
         booksCurrentlyReading: user.booksCurrentlyReading,
         booksRead: user.booksRead
-      }, function() {
+      }, function () {
 
 
         /*
@@ -69,7 +69,7 @@ var myBooksController = function(User, Book, Update) {
         */
 
         var newUpdate = new Update({
-          text: `${user.username} changed ${book.title}\'s status to ${newStatus}`,
+          text: user.username + ' changed ' + book.title + ' \'s status to ' + newStatus,
           date: new Date(),
           user: {
             username: user.username,
@@ -82,7 +82,7 @@ var myBooksController = function(User, Book, Update) {
           }
         });
 
-        newUpdate.save(function(err, update) {
+        newUpdate.save(function (err, update) {
 
           res.json(true);
         });
@@ -91,7 +91,7 @@ var myBooksController = function(User, Book, Update) {
     });
   };
 
-  var get = function(req, res) {
+  var get = function (req, res) {
     var user = req.user;
     if (!user) {
       res.status(401);
@@ -102,14 +102,14 @@ var myBooksController = function(User, Book, Update) {
     }
     var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
 
-    var bookIds = books.map(function(book) {
+    var bookIds = books.map(function (book) {
       return book.id;
     });
     Book.find({
       _id: {
         "$in": bookIds
       }
-    }, function(err, books) {
+    }, function (err, books) {
       if (err) {
         throw err;
       }
