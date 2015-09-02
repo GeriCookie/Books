@@ -10,6 +10,18 @@
 </head>
 
 <body>
+  <!--
+  sdk facebook
+  -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
   <div id="root">
     <nav class="navbar navbar-fixed-top navbar-inverse">
       <div class="container">
@@ -34,6 +46,9 @@
               <a href="#/books" class="hidden" id="btn-nav-logout">Sign out</a>
             </li>
           </ul>
+          <div class="right socialHeader">
+            <!-- data-href is a placeholder here we should put the real facebook page -->
+            <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>          </div>
         </div>
       </div>
     </nav>

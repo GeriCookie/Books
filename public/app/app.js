@@ -254,6 +254,10 @@ var sammyApp = Sammy('#content', function() {
           var html = template(book);
           $('#content').html(html);
 
+          // because html adds the content after the sdk triggering
+          // we need to reparse the sdk after the load
+          FB.XFBML.parse();
+
           $('.btn-change-status').on('click', function() {
             var $this = $(this);
             var status = $this.attr('data-status');
