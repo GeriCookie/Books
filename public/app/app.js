@@ -121,10 +121,10 @@ var sammyApp = Sammy('#content', function() {
                 coverUrl: $('#tb-cover-url').val()
               })
               .then(function(book) {
+                toastr.clear();
+                toastr.success('Book added successfully!');
                 context.redirect('#/books/' + book._id);
               });
-            toastr.clear();
-            toastr.success('Book added successfully!')
           }
         });
 
@@ -227,7 +227,6 @@ var sammyApp = Sammy('#content', function() {
               return true;
             }
           }
-
         });
       });
   });
@@ -310,4 +309,21 @@ $(function() {
         document.location.reload(true);
       });
   });
+
+  loadGenresSidebar();
 });
+
+function loadGenresSidebar() {
+  data.genres.get()
+    .then(function(genres) {
+      var $container = $('<div />');
+      $.get('app/partials/genres-sidebar-partial.html', function(templateString) {
+        var template = handlebars.compile(templateString);
+
+        var html = template({
+          genres
+        });
+        $('#genres-container').html(html);
+      });
+    });
+}
