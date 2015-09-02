@@ -193,6 +193,29 @@ var sammyApp = Sammy('#content', function() {
         });
       });
   });
+
+  this.get('#/mybooks', function() {
+    data.myBooks.get()
+      .then(function(books) {
+        var $container = $('<div />');
+        $.get('app/partials/book-id-partial.html', function(templateString) {
+          var template = handlebars.compile(templateString);
+          books.map(template)
+            .forEach(function(bookhtml) {
+              $container.append(bookhtml);
+            });
+          $('#content').html($container.html());
+
+          $('.btn-change-status').on('click', function() {
+            var $this = $(this);
+            var status = $this.attr('data-status');
+            var bookId = $this.parents('.book-container').attr('data-id');
+            console.log(bookId);
+            data.myBooks.changeStatus(bookId, status);
+          });
+        });
+      });
+  });
 });
 
 $(function() {

@@ -16,15 +16,14 @@ var userModel = new Schema({
 		type: String
 	},
 	booksToRead: {
-		type: [String]
+		type: [Schema.Types.Mixed]
 	},
 	booksCurrentlyReading: {
-		type: [String]
+		type: [Schema.Types.Mixed]
 	},
 	booksRead: {
-		type: [String]
+		type: [Schema.Types.Mixed]
 	}
-
 });
 
 module.exports = mongoose.model('User', userModel);

@@ -266,6 +266,26 @@ function changeMyBookStatus(bookId, bookStatus) {
   return promise;
 }
 
+function getMyBooks() {
+  var promise = new Promise(function(resolve, reject) {
+    $.ajax({
+      url: '/api/mybooks',
+      method: 'GET',
+      contentType: 'application/json',
+      headers: {
+        'x-auth-key': localStorage.getItem('auth-key')
+      },
+      success: function(res) {
+        resolve(res);
+      },
+      error: function(err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
 var books = {
   get: getBooks,
   save: saveBook,
@@ -282,7 +302,8 @@ var users = {
 };
 
 var myBooks = {
-  changeStatus: changeMyBookStatus
+  changeStatus: changeMyBookStatus,
+  get: getMyBooks
 }
 
 var genres = {
