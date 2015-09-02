@@ -1,9 +1,13 @@
+<head>
+    <link rel="stylesheet" href="../../bower_components/toastr/toastr.css">
+    <script src="../../bower_components/toastr/toastr.js"></script>
+</head>
 <div data-id="{{_id}}">
     <label for="tb-title">Title: </label><input id="tb-title" value="{{title}}"><br>
     <label for="tb-author">Author: </label><input id="tb-author" value="{{author}}"><br>
-    <label for="tb-genre">Genres:
+    <label for="tb-genre1">Genres:
         {{#each genres}}
-        <input class="tb-genre" value="{{this}}" id="tb-genre"><br>
+        <input class="tb-genre" value="{{this}}" id="tb-genre1"><br>
         {{/each}}
     </label><br>
     <label for="tb-rating">Rating:</label><input id="tb-rating" value="{{rating}}"><br>
