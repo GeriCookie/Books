@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../../AdditionalStyles.css">
-</head>
 
-<div data-id="{{_id}}">
+<div data-id="{{_id}}" class="book-container">
 	<h2><a href="#/books/{{_id}}" class="button">Title: {{title}}</a></h2>
 	<p>Author:<a href="#/books?author={{author}}" class="button">{{author}}</a></p>
 	<p>Genres:
@@ -18,5 +12,8 @@
 	<p>Description: {{description}}</p>
 	<p>Pages: {{pages}}</p>
 	<p>Reviews: {{reviews}}</p>
-	<a href="#/books/{{_id}}/edit" class="btn btn-default">Edit book</a>
+	<a href="#/books/{{_id}}/edit" class="btn btn-default" class="btn btn-primary">Edit book</a>
+	<button id="want-to-read" class="btn btn-default" class="btn btn-primary">Want to Read</button>
+	<button id="currently-reading" class="btn btn-default" class="btn btn-primary">Currently Reading</button>
+	<button id="read" class="btn btn-default" class="btn btn-primary">Read</button>
 </div>

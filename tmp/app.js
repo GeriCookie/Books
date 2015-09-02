@@ -18,14 +18,10 @@ app.use('/', express.static(__dirname + '/public'));
 
 app.use(bodyParser.json());
 
-var bookRouter = require('./Routes/bookRoutes')(Book);
-var userRouter = require('./Routes/userRoutes')(User);
-app.use('/api/books', bookRouter);
-app.use('/api/authors', bookRouter);
-app.use('/api/users', userRouter);
 
 app.use('/', function (req, res, next) {
 	var authKey = req.headers['x-auth-key'];
+	console.log(authKey);
 	if (!authKey) {
 		next();
 		return;
@@ -39,6 +35,15 @@ app.use('/', function (req, res, next) {
 			next();
 		});
 });
+
+
+var bookRouter = require('./Routes/bookRoutes')(Book);
+var userRouter = require('./Routes/userRoutes')(User);
+var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book);
+app.use('/api/books', bookRouter);
+app.use('/api/authors', bookRouter);
+app.use('/api/users', userRouter);
+app.use('/api/mybooks', myBooksRouter);
 
 
 app.get('/api/genres', function (req, res) {

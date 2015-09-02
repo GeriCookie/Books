@@ -19,7 +19,7 @@ var routes = function (User) {
 
 			User.findOne(query, function (err, user) {
 				if (err) {
-					res.send(404);
+					throw err;
 				} else if (user.passHash === passHash) {
 					var userSend = {
 						username: user.nickname,
@@ -28,7 +28,9 @@ var routes = function (User) {
 
 					res.json(userSend);
 				} else {
-					res.sendStatus(404);
+					res.status(404).json({
+						message: 'Invalid username or password'
+					});
 				}
 			});
 
