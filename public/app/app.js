@@ -25,6 +25,8 @@ var sammyApp = Sammy('#content', function () {
           $('#content').html($container.html());
         });
       });
+
+
   });
 
   this.get('#/login', function (context) {
@@ -44,6 +46,8 @@ var sammyApp = Sammy('#content', function () {
             context.redirect('#/books');
 
 
+          }, function (err) {
+            alert(JSON.stringify(err));
           });
       });
 
@@ -69,6 +73,8 @@ var sammyApp = Sammy('#content', function () {
           })
           .then(function (user) {
             context.redirect('#/login');
+          }, function (err) {
+            alert(JSON.stringify(err));
           });
 
       });
