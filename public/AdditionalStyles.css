@@ -11,7 +11,10 @@ div p a:last-of-type:after {
   display: inline
 }
 .col-sm-1{
-    width: 15%;
+    width: 23%;
+}
+.col-sm-3{
+    width: 36%;
 }
 .col-sm-offset-1{
     margin-left: 32.32%;

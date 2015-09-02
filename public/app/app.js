@@ -43,7 +43,7 @@ var sammyApp = Sammy('#content', function() {
     $.get('app/partials/login-partial.html', function(html) {
       $('#content').html(html);
 
-      $('#sign-in').on('click', function() {
+      $('#login-form').on('submit', function() {
         var username = $('#username').val();
         var password = $('#password').val();
 
