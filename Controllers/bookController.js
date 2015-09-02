@@ -44,6 +44,7 @@ var bookController = function (Book) {
 						}));
 					});
 				}
+				
 				res.json(books);
 			}
 		});
