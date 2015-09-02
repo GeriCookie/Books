@@ -1,0 +1,17 @@
+<div data-id="{{_id}}">
+    <label for="tb-title">Title: </label><input id="tb-title" value="{{title}}"><br>
+    <label for="tb-author">Author: </label><input id="tb-author" value="{{author}}"><br>
+    <label for="tb-genre">Genres:
+        {{#each genres}}
+        <input class="tb-genre" value="{{this}}" id="tb-genre"><br>
+        {{/each}}
+    </label><br>
+    <label for="tb-rating">Rating:</label><input id="tb-rating" value="{{rating}}"><br>
+    <label for="tb-description">Description:</label><input id="tb-description" value="{{description}}"><br>
+    <label for="tb-pages">Pages:</label><input id="tb-pages" value="{{pages}}"><br>
+    <label for="tb-cover-url">Enter url of book cover: <input type="text" id="tb-cover-url"
+                                                              placeholder="Url of image.."></label>
+    <input type="button" value="Preview image" id="tb-btn-preview" class="btn btn-primary"><br>
+    <img src="" height="200" id="tb-cover"><br>
+    <button id='save' class='btn btn-default'>Save</button>
+</div>
