@@ -64,6 +64,19 @@ function loginUser(user) {
   return promise;
 }
 
+function logoutUser() {
+  var promise = new Promise(function(resolve, reject) {
+    localStorage.removeItem('username');
+    localStorage.removeItem('auth-key');
+    resolve();
+  });
+  return promise;
+}
+
+function hasUser() {
+  return !!localStorage.getItem('auth-key');
+}
+
 function getUser(user) {
   var options = options || {},
     promise = new Promise(function(resolve, reject) {
@@ -240,8 +253,6 @@ function editBook(book) {
   return promise;
 }
 
-
-
 function changeMyBookStatus(bookId, bookStatus) {
   var data = {
     bookId, bookStatus
@@ -297,6 +308,8 @@ var users = {
   get: getUser,
   register: registerUser,
   login: loginUser,
+  logout: logoutUser,
+  hasUser: hasUser,
   getById: getUserById,
   edit: editUser
 };
@@ -304,11 +317,12 @@ var users = {
 var myBooks = {
   changeStatus: changeMyBookStatus,
   get: getMyBooks
-}
+};
 
 var genres = {
   get: getGenres
 };
+
 export {
   books,
   genres,
