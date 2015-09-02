@@ -23,8 +23,11 @@ var bookController = function (Book) {
 		}
 	};
 
+
 	var get = function (req, res) {
-		var query = {};
+		var query = {},
+			page = req.query.page || 0,
+			size = req.query.size || 10;
 
 		var validParams = ['author'];
 		validParams.forEach(function (name) {
@@ -44,7 +47,9 @@ var bookController = function (Book) {
 						}));
 					});
 				}
-				
+
+				books = books.slice(page*size, size);
+
 				res.json(books);
 			}
 		});
