@@ -1,6 +1,6 @@
 require('../polyfills/array');
 
-var myBooksController = function(User, Book) {
+var myBooksController = function(User, Book, Update) {
   var put = function(req, res) {
     var user = req.user;
 
@@ -28,6 +28,7 @@ var myBooksController = function(User, Book) {
         return;
       }
 
+      var oldStatus = 'not reading';
 
       ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function(name) {
         var index = user[name].findIndex(function(myBook) {
@@ -35,6 +36,7 @@ var myBooksController = function(User, Book) {
         });
         if (index >= 0) {
           user[name].splice(index, 1);
+          oldStatus = name;
         }
       });
 
@@ -49,6 +51,8 @@ var myBooksController = function(User, Book) {
         updateDate: new Date()
       });
 
+      var newStatus = statusMap[obj.bookStatus];
+
       User.update({
         _id: user._id
       }, {
@@ -56,8 +60,31 @@ var myBooksController = function(User, Book) {
         booksCurrentlyReading: user.booksCurrentlyReading,
         booksRead: user.booksRead
       }, function() {
-        res.json(true);
-        console.log('Book saved');
+
+        /*
+          text: String,
+          date: Date,
+          user: Schema.Types.Mixed,
+          book: Schema.Types.Mixed
+        */
+        var newUpdate = new Update({
+          text: `${user.username} changed ${book.title}\'s status to ${newStatus}`,
+          date: new Date(),
+          user: {
+            username: user.username,
+            id: user._id
+          },
+          book: {
+            id: book.id,
+            name: book.title
+          }
+        });
+
+        newUpdate.save(function(err, update) {
+
+          res.json(true);
+        });
+
       });
     });
   };

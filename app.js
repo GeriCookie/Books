@@ -7,6 +7,7 @@ var db = mongoose.connect('mongodb://localhost/books');
 
 var Book = require('./models/bookModel');
 var User = require('./models/userModel');
+var Update = require('./models/updateModel');
 var app = express();
 
 var port = 3000;
@@ -39,7 +40,7 @@ app.use('/', function (req, res, next) {
 
 var bookRouter = require('./Routes/bookRoutes')(Book);
 var userRouter = require('./Routes/userRoutes')(User);
-var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book);
+var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book, Update);
 app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
 app.use('/api/users', userRouter);

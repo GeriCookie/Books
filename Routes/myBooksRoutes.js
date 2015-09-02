@@ -1,9 +1,9 @@
 var express = require('express');
 
-var routes = function(User, Book) {
+var routes = function(User, Book, Update) {
   var myBooksRouter = express.Router();
 
-  var myBooksController = require('../Controllers/myBooksController')(User, Book);
+  var myBooksController = require('../Controllers/myBooksController')(User, Book, Update);
   myBooksRouter.route('/')
     .get(myBooksController.get)
     .put(myBooksController.put);
