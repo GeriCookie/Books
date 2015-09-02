@@ -61,12 +61,13 @@ var myBooksController = function(User, Book, Update) {
         booksRead: user.booksRead
       }, function() {
 
+
         /*
-          text: String,
-          date: Date,
-          user: Schema.Types.Mixed,
-          book: Schema.Types.Mixed
+        <p>{{text}}</p>
+        book: <a href="#/books/{{book.id}}">{{book.title}}</a>
+        by <a href="#/users/{{user.id}}">{{user.username}}</a>
         */
+
         var newUpdate = new Update({
           text: `${user.username} changed ${book.title}\'s status to ${newStatus}`,
           date: new Date(),
@@ -76,7 +77,8 @@ var myBooksController = function(User, Book, Update) {
           },
           book: {
             id: book.id,
-            name: book.title
+            title: book.title,
+            status: newStatus
           }
         });
 
