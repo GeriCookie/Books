@@ -1,7 +1,7 @@
 require('../polyfills/array');
 
-var myBooksController = function(User, Book) {
-  var put = function(req, res) {
+var myBooksController = function (User, Book, Update) {
+  var put = function (req, res) {
     var user = req.user;
 
     if (!user) {
@@ -16,7 +16,7 @@ var myBooksController = function(User, Book) {
       bookId: req.body.bookId,
       bookStatus: req.body.bookStatus
     };
-    Book.findById(obj.bookId, function(err, book) {
+    Book.findById(obj.bookId, function (err, book) {
       if (err) {
         // res.status(500).json(err);
         throw err;
@@ -28,13 +28,15 @@ var myBooksController = function(User, Book) {
         return;
       }
 
+      var oldStatus = 'not reading';
 
-      ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function(name) {
-        var index = user[name].findIndex(function(myBook) {
+      ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function (name) {
+        var index = user[name].findIndex(function (myBook) {
           return myBook.id === book._id.toString();
         });
         if (index >= 0) {
           user[name].splice(index, 1);
+          oldStatus = name;
         }
       });
 
@@ -49,20 +51,47 @@ var myBooksController = function(User, Book) {
         updateDate: new Date()
       });
 
+      var newStatus = statusMap[obj.bookStatus];
+
       User.update({
         _id: user._id
       }, {
         booksToRead: user.booksToRead,
         booksCurrentlyReading: user.booksCurrentlyReading,
         booksRead: user.booksRead
-      }, function() {
-        res.json(true);
-        console.log('Book saved');
+      }, function () {
+
+
+        /*
+        <p>{{text}}</p>
+        book: <a href="#/books/{{book.id}}">{{book.title}}</a>
+        by <a href="#/users/{{user.id}}">{{user.username}}</a>
+        */
+
+        var newUpdate = new Update({
+          text: user.username + ' changed ' + book.title + ' \'s status to ' + newStatus,
+          date: new Date(),
+          user: {
+            username: user.username,
+            id: user._id
+          },
+          book: {
+            id: book.id,
+            title: book.title,
+            status: newStatus
+          }
+        });
+
+        newUpdate.save(function (err, update) {
+
+          res.json(true);
+        });
+
       });
     });
   };
 
-  var get = function(req, res) {
+  var get = function (req, res) {
     var user = req.user;
     if (!user) {
       res.status(401);
@@ -73,14 +102,14 @@ var myBooksController = function(User, Book) {
     }
     var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
 
-    var bookIds = books.map(function(book) {
+    var bookIds = books.map(function (book) {
       return book.id;
     });
     Book.find({
       _id: {
         "$in": bookIds
       }
-    }, function(err, books) {
+    }, function (err, books) {
       if (err) {
         throw err;
       }

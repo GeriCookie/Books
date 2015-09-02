@@ -3,14 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Books</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../../AdditionalStyles.css">
 </head>
 
 <body>
 <div id="root">
-  <!--<header> -->
   <nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container">
       <div id="navbar" class="collapse navbar-collapse">
@@ -31,16 +30,12 @@
             <a href="#/login">Sign in</a>
           </li>
         </ul>
-      </div><!-- /.nav-collapse -->
-    </div><!-- /.container -->
-  </nav><!-- /.navbar -->
-
-  <!--</header> -->
-
+      </div>
+    </div>
+  </nav>
   <div class="jumbotron">
     <div class="container">
       <h1>Books</h1>
-      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
     </div>
     </div>
   </div>
@@ -48,22 +43,22 @@
   <div id="content">
   </div>
 
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/sammy/lib/sammy.js"></script>
-<script src="bower_components/sammy/lib/plugins/sammy.handlebars.js"></script>
-<script src="bower_components/system.js/dist/system.js"></script>
-<script>
-  System.config({
-    transpiler: 'babel',
-    paths: {
-      '*': '*.js'
-    },
-    map: {
-      babel: './libs/browser.min.js'
-    }
-  });
-  System.import('app/app')
-</script>
-</body>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/sammy/lib/sammy.js"></script>
+  <script src="bower_components/sammy/lib/plugins/sammy.handlebars.js"></script>
+  <script src="bower_components/system.js/dist/system.js"></script>
+  <script>
+    System.config({
+      transpiler: 'babel',
+      paths: {
+        '*': '*.js'
+      },
+      map: {
+        babel: './libs/browser.min.js'
+      }
+    });
+    System.import('app/app')
+  </script>
+  </body>
 
 </html>

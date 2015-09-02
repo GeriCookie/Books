@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6db71821-2a57-4166-b7bb-a99b51ccb68e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/app.js" afterPath="$PROJECT_DIR$/public/app/app.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Controllers/newsfeedController.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/models/updateModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/partials/book-add-partial.html" afterPath="$PROJECT_DIR$/public/app/partials/book-add-partial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/partials/book-edit-partial.html" afterPath="$PROJECT_DIR$/public/app/partials/book-edit-partial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/partials/book-id-partial.html" afterPath="$PROJECT_DIR$/public/app/partials/book-id-partial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/partials/login-partial.html" afterPath="$PROJECT_DIR$/public/app/partials/login-partial.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/app/partials/register-partial.html" afterPath="$PROJECT_DIR$/public/app/partials/register-partial.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/bookModel.js" afterPath="$PROJECT_DIR$/models/bookModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controllers/myBooksController.js" afterPath="$PROJECT_DIR$/Controllers/myBooksController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Routes/myBooksRoutes.js" afterPath="$PROJECT_DIR$/Routes/myBooksRoutes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/userModel.js" afterPath="$PROJECT_DIR$/models/userModel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Books.iws" />
@@ -42,8 +45,8 @@
       <file leaf-file-name="book-add-partial.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/app/partials/book-add-partial.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41105354">
-              <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.67530227">
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -73,9 +76,9 @@
         <option value="$PROJECT_DIR$/public/app/partials/book-id-partial.html" />
         <option value="$PROJECT_DIR$/public/app/app.js" />
         <option value="$PROJECT_DIR$/public/app/partials/book-edit-partial.html" />
-        <option value="$PROJECT_DIR$/public/app/partials/book-add-partial.html" />
         <option value="$PROJECT_DIR$/public/app/data/data.js" />
         <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/public/app/partials/book-add-partial.html" />
       </list>
     </option>
   </component>
@@ -435,14 +438,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Routes/bookRoutes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -817,10 +812,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Controllers/myBooksController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.2876034">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/app/partials/book-add-partial.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41105354">
-          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
+        <state vertical-scroll-proportion="0.67530227">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
         </state>
       </provider>

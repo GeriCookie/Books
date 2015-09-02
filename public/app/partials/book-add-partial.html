@@ -1,15 +1,72 @@
 <head>
     <script src="../../bower_components/toastr/toastr.js"></script>
 </head>
-<label for="tb-title">Title: </label><input type="text" id="tb-title"><br>
-<label for="tb-author">Author: </label><input type="text" id="tb-author"><br>
-<label for="tb-genre1">Genres:<input type="text" class="tb-genre" id="tb-genre1">
-    <input type="text" class="tb-genre2">
-    <input type="text" class="tb-genre3"> </label><br>
-<label for="tb-description">Description: </label><input type="text" id="tb-description"><br>
-<label for="tb-pages">Number of pages: </label><input type="text" id="tb-pages"><br>
-<label for="tb-cover-url">Enter url of book cover: </label>
-<input type="text" id="tb-cover-url" placeholder="Url of image..">
-<input type="button" value="Preview image" id="tb-btn-preview" class="btn btn-primary"><br>
-<img src="" height="200" id="tb-cover"><br>
-<button id="add-book">Add book</button>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="tb-title" class="col-sm-2 control-label">Title: </label>
+        <div class="col-sm-6">
+            <input type="text" id="tb-title" class="form-control" placeholder="Title">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tb-author" class="col-sm-2 control-label">Author: </label>
+        <div class="col-sm-6">
+            <input type="text" id="tb-author" class="form-control" placeholder="Author">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tb-genre1" class="col-sm-2 control-label">Genres: </label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" class="tb-genre" id="tb-genre1" placeholder="Genre">
+        </div>
+
+        <div class="col-sm-2">
+            <input type="text" class="form-control" class="tb-genre" placeholder="Genre">
+        </div>
+
+        <div class="col-sm-2">
+            <input type="text" class="form-control" class="tb-genre" placeholder="Genre">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tb-description" class="col-sm-2 control-label">Description: </label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="tb-description" placeholder="Description">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tb-pages" class="col-sm-2 control-label">Number of pages: </label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="tb-pages" placeholder="Number of pages">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tb-cover-url" class="col-sm-2 control-label">Enter url of book cover: </label>
+        <div class="col-sm-6">
+            <input type="text" id="tb-cover-url" class="form-control" placeholder="Url of image">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="tb-btn-preview" type="button" class="btn btn-primary">Preview image</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <img src="" height="200" id="tb-cover">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="add-book" type="button" class="btn btn-primary">Add book</button>
+        </div>
+    </div>
+</form>
