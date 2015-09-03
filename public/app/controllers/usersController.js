@@ -51,13 +51,13 @@ function register(context) {
 
       }
 
-      if (!password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{4,})$/)) {
-        $('.wrong-password').show();
-        $('.wrong-password').parent().addClass('has-error');
-        console.log("Hodor");
-        return;
-
-      }
+      // if (!password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{4,})$/)) {
+      //   $('.wrong-password').show();
+      //   $('.wrong-password').parent().addClass('has-error');
+      //   console.log("Hodor");
+      //   return;
+      //
+      // }
 
       data.users.register({
           username: username,
