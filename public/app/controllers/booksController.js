@@ -8,7 +8,9 @@ import templates from 'app/templates';
 function all(context) {
   var params = {
     author: this.params.author,
-    genre: this.params.genre
+    genre: this.params.genre,
+    page: this.params.page,
+    size: this.params.size
   };
   var books;
   data.books.get(params)
@@ -26,17 +28,31 @@ function all(context) {
         .forEach(function(bookhtml) {
           $container.append(bookhtml);
         });
-      $('#content').html($container.html());
-
-      $('.btn-change-status').on('click', function() {
-        if (!data.users.hasUser()) {
-          context.redirect('#/login');
-          return;
+      $.getJSON('api/book-pages', function(resp) {
+        var pages = resp.pages;
+        var $pages = $('<div/>')
+          .addClass('pages')
+          .html('<strong>Page: </strong>');
+        for (var i = 0; i < pages; i += 1) {
+          $('<a />')
+            .attr('href', '#/books?page=' + (i + 1))
+            .html(i + 1)
+            .appendTo($pages);
         }
-        var $this = $(this);
-        var status = $this.attr('data-status');
-        var bookId = $this.parents('.book-container').attr('data-id');
-        data.myBooks.changeStatus(bookId, status);
+
+        $('#content').html($container.html())
+          .append($pages);
+
+        $('.btn-change-status').on('click', function() {
+          if (!data.users.hasUser()) {
+            context.redirect('#/login');
+            return;
+          }
+          var $this = $(this);
+          var status = $this.attr('data-status');
+          var bookId = $this.parents('.book-container').attr('data-id');
+          data.myBooks.changeStatus(bookId, status);
+        });
       });
     });
 }

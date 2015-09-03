@@ -183,6 +183,8 @@ function saveBook(book) {
 //getBooks({genre: 'sci-fi', author: "...."})
 function getBooks(options) {
   options = options || {};
+  options.page = options.page || 1;
+  options.size = options.size || 10;
 
   var promise = new Promise(function(resolve, reject) {
     var url = '/api/books',
@@ -302,7 +304,7 @@ function changeMyBookStatus(bookId, bookStatus) {
 function getMyBooks() {
   var promise = new Promise(function(resolve, reject) {
     $.ajax({
-      url: '/api/mybooks',
+      url: '/api/mybooks/all?noCaching=' + Math.random(),
       method: 'GET',
       contentType: 'application/json',
       headers: {

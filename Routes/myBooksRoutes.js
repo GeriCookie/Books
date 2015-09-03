@@ -1,132 +1,166 @@
 var express = require('express');
 
-var routes = function (User, Book, Update) {
-	var myBooksRouter = express.Router();
+var routes = function(User, Book, Update) {
+  var myBooksRouter = express.Router();
 
-	var myBooksController = require('../Controllers/myBooksController')(User, Book, Update);
-	myBooksRouter.route('/')
-		.get(myBooksController.get)
-		.put(myBooksController.put);
-
-
-	myBooksRouter.route('/all')
-		.get(function (req, res) {
-			var user = req.user;
-			if (!user) {
-				res.status(401);
-				res.json({
-					message: 'Unauthorized user'
-				});
-				return;
-			}
-			var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
-
-			var bookIds = books.map(function (book) {
-				return book.id;
-			});
-			Book.find({
-				_id: {
-					"$in": bookIds
-				}
-			}, function (err, books) {
-				if (err) {
-					throw err;
-				}
-				res.json(books);
-			});
-		});
-
-	myBooksRouter.route('/to-read')
-		.get(function (req, res) {
-			var user = req.user;
-			if (!user) {
-				res.status(401);
-				res.json({
-					message: 'Unathorized user'
-				});
-				return;
-			}
-
-			var books = user.booksToRead;
-
-			var bookIds = books.map(function (book) {
-				return book.id;
-			});
-
-			Book.find({
-				_id: {
-					"$in": bookIds
-				}
-			}, function (err, books) {
-				if (err) {
-					throw err;
-				}
-				res.json(books);
-			});
-		});
-
-	myBooksRouter.route('/currently-reading')
-		.get(function (req, res) {
-			var user = req.user;
-			if (!user) {
-				res.status(401);
-				res.json({
-					message: 'Unathorized user'
-				});
-				return;
-			}
-
-			var books = user.booksCurrentlyReading;
-
-			var bookIds = books.map(function (book) {
-				return book.id;
-			});
-
-			Book.find({
-				_id: {
-					"$in": bookIds
-				}
-			}, function (err, books) {
-				if (err) {
-					throw err;
-				}
-				res.json(books);
-			});
-		});
+  var myBooksController = require('../Controllers/myBooksController')(User, Book, Update);
+  myBooksRouter.route('/')
+    .get(myBooksController.get)
+    .put(myBooksController.put);
 
 
-	myBooksRouter.route('/read')
-		.get(function (req, res) {
-			var user = req.user;
-			if (!user) {
-				res.status(401);
-				res.json({
-					message: 'Unathorized user'
-				});
-				return;
-			}
+  myBooksRouter.route('/all')
+    .get(function(req, res) {
+      var user = req.user;
+      if (!user) {
+        res.status(401);
+        res.json({
+          message: 'Unauthorized user'
+        });
+        return;
+      }
+      var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
 
-			var books = user.booksRead;
+      var bookIds = books.map(function(book) {
+        return book.id;
+      });
+      console.log(bookIds);
+      Book.find({
+        _id: {
+          "$in": bookIds
+        }
+      }, function(err, dbBooks) {
+        if (err) {
+          throw err;
+        }
 
-			var bookIds = books.map(function (book) {
-				return book.id;
-			});
+        books.sort(function(b1, b2) {
+          var id1 = b1.id.toString(),
+            id2 = b2.id.toString();
+          return id1.localeCompare(id2);
+        });
 
-			Book.find({
-				_id: {
-					"$in": bookIds
-				}
-			}, function (err, books) {
-				if (err) {
-					throw err;
-				}
-				res.json(books);
-			});
-		});
+        dbBooks.sort(function(b1, b2) {
+          var id1 = b1._id.toString(),
+            id2 = b2._id.toString();
+          return id1.localeCompare(id2);
+        });
 
 
+        var statusMaps = {
+          booksRead: 'read',
+          booksToRead: 'want-to-read',
+          booksCurrentlyReading: 'currently-reading'
+        };
+        var resBooks = [];
+        for (var i = 0; i < books.length; i += 1) {
+          var dbBook = dbBooks[i];
+          resBooks.push({
+            title: dbBook.title,
+            author: dbBook.author,
+            genres: dbBook.genres,
+            description: dbBook.description,
+            pages: dbBook.pages,
+            coverUrl: dbBook.coverUrl,
+            status: statusMaps[books[i].status]
+          });
+        }
 
-	return myBooksRouter;
+        res.json(resBooks);
+      });
+    });
+
+  myBooksRouter.route('/to-read')
+    .get(function(req, res) {
+      var user = req.user;
+      if (!user) {
+        res.status(401);
+        res.json({
+          message: 'Unathorized user'
+        });
+        return;
+      }
+
+      var books = user.booksToRead;
+
+      var bookIds = books.map(function(book) {
+        return book.id;
+      });
+
+      Book.find({
+        _id: {
+          "$in": bookIds
+        }
+      }, function(err, books) {
+        if (err) {
+          throw err;
+        }
+        res.json(books);
+      });
+    });
+
+  myBooksRouter.route('/currently-reading')
+    .get(function(req, res) {
+      var user = req.user;
+      if (!user) {
+        res.status(401);
+        res.json({
+          message: 'Unathorized user'
+        });
+        return;
+      }
+
+      var books = user.booksCurrentlyReading;
+
+      var bookIds = books.map(function(book) {
+        return book.id;
+      });
+
+      Book.find({
+        _id: {
+          "$in": bookIds
+        }
+      }, function(err, books) {
+        if (err) {
+          throw err;
+        }
+        res.json(books);
+      });
+    });
+
+
+  myBooksRouter.route('/read')
+    .get(function(req, res) {
+      var user = req.user;
+      if (!user) {
+        res.status(401);
+        res.json({
+          message: 'Unathorized user'
+        });
+        return;
+      }
+
+      var books = user.booksRead;
+
+      var bookIds = books.map(function(book) {
+        return book.id;
+      });
+
+      Book.find({
+        _id: {
+          "$in": bookIds
+        }
+      }, function(err, books) {
+        if (err) {
+          throw err;
+        }
+        res.json(books);
+      });
+    });
+
+
+
+  return myBooksRouter;
 };
 
 module.exports = routes;
