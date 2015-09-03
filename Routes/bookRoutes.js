@@ -57,6 +57,21 @@ var routes = function (Book) {
 			});
 		});
 
+	bookRouter.route('api/books/pages')
+		.get(function (req, res) {
+			var size = req.query.size || 10;
+			Book.find({}, function (err, books) {
+				if (err) {
+					res.status(404).send(err);
+				}
+				var booksCount = books.length;
+				var pagesCount = booksCount / size + 1;
+				res.json({
+					pages: pagesCount
+				});
+			});
+		});
+
 	return bookRouter;
 };
 

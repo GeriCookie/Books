@@ -6,13 +6,20 @@ var bookController = function (Book) {
 		if (!req.body.title) {
 			res.status(400);
 			res.send('Title is required');
-			// } else if (!req.body.author) {
-			// 	res.status(400);
-			// 	res.send('Author is required');
-			// } else if (Array.isArray(req.body.genres) || req.body.genres.length === 0) {
-			// 	res.status(400);
-			// 	res.send('Genre is required');
-		} else {
+			return;
+		}
+		Book.findOne({
+			title: book.title
+		}, function (err, dbbook) {
+			if (err) {
+				throw err;
+			}
+			if (dbbook) {
+				res.status(400).json({
+					message: 'Book already in DB'
+				});
+				return;
+			}
 			book.save(function (err, result) {
 				if (err) {
 					throw err;
@@ -20,7 +27,9 @@ var bookController = function (Book) {
 				res.status(201);
 				res.send(book);
 			});
-		}
+
+		});
+
 	};
 
 
@@ -48,7 +57,7 @@ var bookController = function (Book) {
 					});
 				}
 
-				books = books.slice(page*size, size);
+				books = books.slice(page * size, size);
 
 				res.json(books);
 			}
