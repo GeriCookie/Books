@@ -80,13 +80,16 @@ var sammyApp = Sammy('#content', function () {
         if (password !== confirmPassword) {
           $('.wrong-confirm-password').show();
           $('.wrong-confirm-password').parent().addClass('has-error');
-          context.redirect('#/register');
+          return;
+
         }
 
         if (!password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{4,})$/)) {
           $('.wrong-password').show();
           $('.wrong-password').parent().addClass('has-error');
-          context.redirect('#/register');
+          console.log("Hodor");
+          return;
+
         }
 
         data.users.register({
