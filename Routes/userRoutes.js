@@ -23,10 +23,7 @@ var routes = function (User) {
                 } else if (user == null) {
 
                     console.log('Here must reload login page and clear inputs');
-                    //res.status(404).json({
-                    //    message: 'Invalid user GA'
-                    //});
-
+                    
                 } else if (user.passHash === passHash) {
                     var userSend = {
                         username: user.nickname,
