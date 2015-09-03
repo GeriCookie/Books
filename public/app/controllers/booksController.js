@@ -41,16 +41,15 @@ function all(context) {
 function add(context) {
   if (!data.users.hasUser()) {
     context.redirect('#/login');
-  } else {
-    //context === this
+    return;
+  }
+  templates.get('book-add')
+    .then(function(template) {
 
-    $.get('app/partials/book-add-partial.html', function(html) {
-      // body...
-      $('#content').html(html);
+      $('#content').html(template());
 
-      var $button = $('#add-book')
+      $('#add-book')
         .on('click', function() {
-
           toastr.options.extendedTimeOut = 0;
           var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
           var validateAuthor = data.validation.validateInput($('#tb-author'), 'Author is mandatory!');
@@ -79,27 +78,8 @@ function add(context) {
                 context.redirect('#/books/' + book._id);
               });
           }
-
         });
-
-      $(document).ready(function() {
-        $('#tb-cover').hide();
-
-        $('#tb-btn-preview').on('click', function() {
-          var validateUrl = data.validation.validateInput($('#tb-cover-url'), 'Invalid cover Url');
-          if (validateUrl) {
-            var $uploadButton = $('#tb-btn-preview')
-              .on('click', function() {
-                var $imgURL = $('#tb-cover-url').val();
-                $('#tb-cover')
-                  .attr('src', $imgURL)
-                  .show();
-              });
-          }
-        });
-      });
     });
-  }
 }
 
 function byId(context) {
@@ -145,35 +125,16 @@ function edit(context) {
           var html = template(book);
           $('#content').html(html);
 
-          $(document).ready(function() {
-            $('#tb-cover').hide();
-          });
-
-          var $uploadButton = $('#tb-btn-preview')
-            .on('click', function() {
-              var validateUrl = data.validation.validateInput($('#tb-cover-url'), 'Invalid cover Url');
-              if (validateUrl) {
-                var $uploadButton = $('#tb-btn-preview')
-                  .on('click', function() {
-                    var $imgURL = $('#tb-cover-url').val();
-                    $('#tb-cover')
-                      .attr('src', $imgURL)
-                      .show();
-
-                  });
-              }
-            });
-
           $('#save')
             .on('click', function() {
-
+              console.log('asd');
               toastr.options.extendedTimeOut = 0;
               var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
               var validateAuthor = data.validation.validateInput($('#tb-author'), 'Author is mandatory!');
-              var validateGenre = data.validation.validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
+              // var validateGenre = data.validation.validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
               var validateDescription = data.validation.validateInput($('#tb-description'), 'Description is mandatory!');
 
-              if (validateTitle && validateAuthor && validateGenre && validateDescription) {
+              if (validateTitle && validateAuthor && validateDescription) {
                 var genres = [];
                 $('.tb-genre').each(function(index, genre) {
                   var value = $(genre).val();

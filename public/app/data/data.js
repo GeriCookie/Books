@@ -1,7 +1,10 @@
 import 'app/polyfills/array';
 import 'bower_components/sha1/index';
-import toastr from 'toastr'
+import toastr from 'toastr';
 //users
+
+var DEFAULT_COVER_URL = 'http://cdn.instructables.com/F1K/H87Q/GZUAFXDP/F1KH87QGZUAFXDP.MEDIUM.jpg';
+
 function registerUser(user) {
   var promise = new Promise(function(resolve, reject) {
     var url = 'api/users';
@@ -202,6 +205,12 @@ function getBooks(options) {
       url: url,
       contentType: 'application/json',
       success: function(books) {
+        books = books.map(function(book) {
+          if (!book.coverUrl) {
+            book.coverUrl = DEFAULT_COVER_URL;
+          }
+          return book;
+        });
         resolve(books);
       },
       error: function(err) {
@@ -221,6 +230,9 @@ function getBookById(id) {
       method: 'GET',
       contentType: 'application/json',
       success: function(book) {
+        if(!book.coverUrl){
+          book.coverUrl = DEFAULT_COVER_URL;
+        }
         resolve(book);
       }
     });
@@ -282,7 +294,7 @@ function changeMyBookStatus(bookId, bookStatus) {
       error: function(err) {
         reject(err);
       }
-    })
+    });
   });
   return promise;
 }
