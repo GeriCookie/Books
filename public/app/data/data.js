@@ -308,8 +308,14 @@ function getMyBooks() {
       headers: {
         'x-auth-key': localStorage.getItem('auth-key')
       },
-      success: function(res) {
-        resolve(res);
+      success: function(books) {
+        books = books.map(function(book) {
+          if (!book.coverUrl) {
+            book.coverUrl = DEFAULT_COVER_URL;
+          }
+          return book;
+        });
+        resolve(books);
       },
       error: function(err) {
         reject(err);

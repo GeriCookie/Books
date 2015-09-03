@@ -18,7 +18,11 @@ function all(context) {
     })
     .then(function(template) {
       var $container = $('<div/>');
-      books.map(template)
+      books.map(function(book) {
+          book.description = book.description.substr(0, 290);
+          return book;
+        })
+        .map(template)
         .forEach(function(bookhtml) {
           $container.append(bookhtml);
         });
@@ -27,13 +31,12 @@ function all(context) {
       $('.btn-change-status').on('click', function() {
         if (!data.users.hasUser()) {
           context.redirect('#/login');
-        } else {
-          var $this = $(this);
-          var status = $this.attr('data-status');
-          var bookId = $this.parents('.book-container').attr('data-id');
-          console.log(bookId);
-          data.myBooks.changeStatus(bookId, status);
+          return;
         }
+        var $this = $(this);
+        var status = $this.attr('data-status');
+        var bookId = $this.parents('.book-container').attr('data-id');
+        data.myBooks.changeStatus(bookId, status);
       });
     });
 }
@@ -87,7 +90,7 @@ function byId(context) {
   var bookId = this.params.id;
   data.books.getById(bookId)
     .then(function(book) {
-      $.get('app/partials/book-id-partial.html', function(templateString) {
+      $.get('app/partials/book-details-partial.html', function(templateString) {
         var template = handlebars.compile(templateString);
         var html = template(book);
         $('#content').html(html);

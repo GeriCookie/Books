@@ -10,7 +10,7 @@ function all(context) {
     data.myBooks.get()
       .then(function(books) {
         var $container = $('<div />');
-        $.get('app/partials/book-id-partial.html', function(templateString) {
+        $.get('app/partials/book-details-partial.html', function(templateString) {
           var template = handlebars.compile(templateString);
           books.map(template)
             .forEach(function(bookhtml) {

@@ -21,10 +21,11 @@
         <a href="#/books?genre={{this}}" class="button">{{this}}</a> {{/each}}
       </p>
       <p>Pages: {{pages}}</p>
-      <p>Description: {{description}} <a href="#/books/{{_id}}" class="button">more...</a></p>
 
       <button class="btn btn-primary btn-change-status" data-status="want-to-read">Want to read</button>
       <button class="btn btn-primary btn-change-status" data-status="currently-reading">Currently reading</button>
       <button class="btn btn-primary btn-change-status" data-status="read">Read</button>
     </div>
+    <p>Description: {{description}}</p>
+
   </div>

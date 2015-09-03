@@ -38,3 +38,8 @@ div p a:last-of-type:after {
 .socialMargin{
     margin-bottom: 5px;
 }
+
+.book-container{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px
+}
