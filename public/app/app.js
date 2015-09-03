@@ -111,17 +111,18 @@ var sammyApp = Sammy('#content', function () {
   });
 
   this.get('#/books/add', function (context) {
-    //context === this
+    if (!data.users.hasUser()) {
+      context.redirect('#/login');
+    } else {
+      //context === this
 
-    $.get('app/partials/book-add-partial.html', function (html) {
-      // body...
-      $('#content').html(html);
+      $.get('app/partials/book-add-partial.html', function (html) {
+        // body...
+        $('#content').html(html);
 
-      var $button = $('#add-book')
-        .on('click', function () {
-          if (!data.users.hasUser()) {
-            context.redirect('#/login');
-          } else {
+        var $button = $('#add-book')
+          .on('click', function () {
+
             toastr.options.extendedTimeOut = 0;
             var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
             var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
@@ -150,35 +151,36 @@ var sammyApp = Sammy('#content', function () {
                   context.redirect('#/books/' + book._id);
                 });
             }
-          }
+
+          });
+
+        $(document).ready(function () {
+          $('#tb-cover').hide();
+
+          $('#tb-btn-preview').on('click', function () {
+            var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
+            if (validateUrl) {
+              var $uploadButton = $('#tb-btn-preview')
+                .on('click', function () {
+                  var $imgURL = $('#tb-cover-url').val();
+                  $('#tb-cover')
+                    .attr('src', $imgURL)
+                    .show();
+                });
+            }
+          });
         });
 
-      $(document).ready(function () {
-        $('#tb-cover').hide();
-
-        $('#tb-btn-preview').on('click', function () {
-          var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
-          if (validateUrl) {
-            var $uploadButton = $('#tb-btn-preview')
-              .on('click', function () {
-                var $imgURL = $('#tb-cover-url').val();
-                $('#tb-cover')
-                  .attr('src', $imgURL)
-                  .show();
-              });
+        function validateInput(tagId, errorMsg) {
+          if (tagId.val() === '' || tagId.val().trim() === '') {
+            toastr.error(errorMsg);
+            return false;
+          } else {
+            return true;
           }
-        });
-      });
-
-      function validateInput(tagId, errorMsg) {
-        if (tagId.val() === '' || tagId.val().trim() === '') {
-          toastr.error(errorMsg);
-          return false;
-        } else {
-          return true;
         }
-      }
-    });
+      });
+    }
   });
 
   this.get('#/books/:id', function (context) {
@@ -212,38 +214,40 @@ var sammyApp = Sammy('#content', function () {
   });
 
   this.get('#/books/:id/edit', function (context) {
-    var bookId = this.params.id;
-    data.books.getById(bookId)
-      .then(function (book) {
-        $.get('app/partials/book-edit-partial.html', function (templateString) {
-          var template = handlebars.compile(templateString);
-          var html = template(book);
-          $('#content').html(html);
+    if (!data.users.hasUser()) {
+      console.log("Hodor hodors");
+      context.redirect('#/login');
+    } else {
+      var bookId = this.params.id;
+      data.books.getById(bookId)
+        .then(function (book) {
+          $.get('app/partials/book-edit-partial.html', function (templateString) {
+            var template = handlebars.compile(templateString);
+            var html = template(book);
+            $('#content').html(html);
 
-          $(document).ready(function () {
-            $('#tb-cover').hide();
-          });
-
-          var $uploadButton = $('#tb-btn-preview')
-            .on('click', function () {
-              var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
-              if (validateUrl) {
-                var $uploadButton = $('#tb-btn-preview')
-                  .on('click', function () {
-                    var $imgURL = $('#tb-cover-url').val();
-                    $('#tb-cover')
-                      .attr('src', $imgURL)
-                      .show();
-
-                  });
-              }
+            $(document).ready(function () {
+              $('#tb-cover').hide();
             });
 
-          $('#save')
-            .on('click', function () {
-              if (!data.users.hasUser()) {
-                context.redirect('#/login');
-              } else {
+            var $uploadButton = $('#tb-btn-preview')
+              .on('click', function () {
+                var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
+                if (validateUrl) {
+                  var $uploadButton = $('#tb-btn-preview')
+                    .on('click', function () {
+                      var $imgURL = $('#tb-cover-url').val();
+                      $('#tb-cover')
+                        .attr('src', $imgURL)
+                        .show();
+
+                    });
+                }
+              });
+
+            $('#save')
+              .on('click', function () {
+
                 toastr.options.extendedTimeOut = 0;
                 var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
                 var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
@@ -274,20 +278,21 @@ var sammyApp = Sammy('#content', function () {
                   toastr.clear();
                   toastr.success('Book edited successfully!');
                 }
-              }
-            });
 
-          function validateInput(tagId, errorMsg) {
-            console.log(tagId);
-            if (tagId.val() === '' || tagId.val().trim() === '') {
-              toastr.error(errorMsg);
-              return false;
-            } else {
-              return true;
+              });
+
+            function validateInput(tagId, errorMsg) {
+              console.log(tagId);
+              if (tagId.val() === '' || tagId.val().trim() === '') {
+                toastr.error(errorMsg);
+                return false;
+              } else {
+                return true;
+              }
             }
-          }
+          });
         });
-      });
+    }
   });
 
 
@@ -307,27 +312,31 @@ var sammyApp = Sammy('#content', function () {
       });
   });
 
-  this.get('#/mybooks', function () {
-    data.myBooks.get()
-      .then(function (books) {
-        var $container = $('<div />');
-        $.get('app/partials/book-id-partial.html', function (templateString) {
-          var template = handlebars.compile(templateString);
-          books.map(template)
-            .forEach(function (bookhtml) {
-              $container.append(bookhtml);
-            });
-          $('#content').html($container.html());
+  this.get('#/mybooks', function (context) {
+    if (!data.users.hasUser()) {
+      context.redirect('#/login');
+    } else {
+      data.myBooks.get()
+        .then(function (books) {
+          var $container = $('<div />');
+          $.get('app/partials/book-id-partial.html', function (templateString) {
+            var template = handlebars.compile(templateString);
+            books.map(template)
+              .forEach(function (bookhtml) {
+                $container.append(bookhtml);
+              });
+            $('#content').html($container.html());
 
-          $('.btn-change-status').on('click', function () {
-            var $this = $(this);
-            var status = $this.attr('data-status');
-            var bookId = $this.parents('.book-container').attr('data-id');
-            console.log(bookId);
-            data.myBooks.changeStatus(bookId, status);
+            $('.btn-change-status').on('click', function () {
+              var $this = $(this);
+              var status = $this.attr('data-status');
+              var bookId = $this.parents('.book-container').attr('data-id');
+              console.log(bookId);
+              data.myBooks.changeStatus(bookId, status);
+            });
           });
         });
-      });
+    }
   });
 });
 
@@ -337,9 +346,11 @@ $(function () {
   if (data.users.hasUser()) {
     $('#btn-nav-logout')
       .removeClass('hidden');
+
   } else {
     $('#btn-nav-login')
       .removeClass('hidden');
+
   }
 
   $('#btn-nav-logout').on('click', function () {
