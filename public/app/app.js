@@ -124,10 +124,10 @@ var sammyApp = Sammy('#content', function () {
           .on('click', function () {
 
             toastr.options.extendedTimeOut = 0;
-            var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
-            var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
-            var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
-            var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
+            var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
+            var validateAuthor = data.validation.validateInput($('#tb-author'), 'Author is mandatory!');
+            var validateGenre = data.validation.validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
+            var validateDescription = data.validation.validateInput($('#tb-description'), 'Description is mandatory!');
 
             if (validateTitle && validateAuthor && validateGenre && validateDescription) {
               var genres = [];
@@ -158,7 +158,7 @@ var sammyApp = Sammy('#content', function () {
           $('#tb-cover').hide();
 
           $('#tb-btn-preview').on('click', function () {
-            var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
+            var validateUrl = data.validation.validateInput($('#tb-cover-url'), 'Invalid cover Url');
             if (validateUrl) {
               var $uploadButton = $('#tb-btn-preview')
                 .on('click', function () {
@@ -170,15 +170,6 @@ var sammyApp = Sammy('#content', function () {
             }
           });
         });
-
-        function validateInput(tagId, errorMsg) {
-          if (tagId.val() === '' || tagId.val().trim() === '') {
-            toastr.error(errorMsg);
-            return false;
-          } else {
-            return true;
-          }
-        }
       });
     }
   });
@@ -232,7 +223,7 @@ var sammyApp = Sammy('#content', function () {
 
             var $uploadButton = $('#tb-btn-preview')
               .on('click', function () {
-                var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
+                var validateUrl = data.validation.validateInput($('#tb-cover-url'), 'Invalid cover Url');
                 if (validateUrl) {
                   var $uploadButton = $('#tb-btn-preview')
                     .on('click', function () {
@@ -249,10 +240,10 @@ var sammyApp = Sammy('#content', function () {
               .on('click', function () {
 
                 toastr.options.extendedTimeOut = 0;
-                var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
-                var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
-                var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
-                var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
+                var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
+                var validateAuthor = data.validation.validateInput($('#tb-author'), 'Author is mandatory!');
+                var validateGenre = data.validation.validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
+                var validateDescription = data.validation.validateInput($('#tb-description'), 'Description is mandatory!');
 
                 if (validateTitle && validateAuthor && validateGenre && validateDescription) {
                   var genres = [];
@@ -294,7 +285,6 @@ var sammyApp = Sammy('#content', function () {
         });
     }
   });
-
 
   this.get('#/genres', function () {
     var genre = this.params.genre;

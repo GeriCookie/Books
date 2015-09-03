@@ -1,5 +1,6 @@
 import 'app/polyfills/array';
 import 'bower_components/sha1/index';
+import toastr from 'toastr'
 //users
 function registerUser(user) {
   var promise = new Promise(function(resolve, reject) {
@@ -145,6 +146,15 @@ function editUser(user) {
   return promise;
 }
 
+//user validation
+function validateInput(tagId, errorMsg) {
+  if (tagId.val() === '' || tagId.val().trim() === '') {
+    toastr.error(errorMsg);
+    return false;
+  } else {
+    return true;
+  }
+}
 
 //books
 function saveBook(book) {
@@ -323,16 +333,22 @@ var genres = {
   get: getGenres
 };
 
+var validation = {
+  validateInput: validateInput
+};
+
 export {
   books,
   genres,
   users,
-  myBooks
+  myBooks,
+  validation
 };
 
 export default {
   books,
   genres,
   users,
-  myBooks
+  myBooks,
+  validation
 };
