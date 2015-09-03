@@ -3,30 +3,30 @@ import toastr from 'toastr';
 import data from 'app/data/data';
 import handlebars from 'bower_components/handlebars/handlebars';
 
-var sammyApp = Sammy('#content', function() {
+var sammyApp = Sammy('#content', function () {
 
-  this.get('#/', function() {
+  this.get('#/', function () {
     console.log('----HOME');
   });
 
-  this.get('#/books', function() {
+  this.get('#/books', function () {
     var params = {
       author: this.params.author,
       genre: this.params.genre
     };
 
     data.books.get(params)
-      .then(function(books) {
+      .then(function (books) {
         var $container = $('<div />');
-        $.get('app/partials/book-id-partial.html', function(templateString) {
+        $.get('app/partials/book-id-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           books.map(template)
-            .forEach(function(bookhtml) {
+            .forEach(function (bookhtml) {
               $container.append(bookhtml);
             });
           $('#content').html($container.html());
 
-          $('.btn-change-status').on('click', function() {
+          $('.btn-change-status').on('click', function () {
             var $this = $(this);
             var status = $this.attr('data-status');
             var bookId = $this.parents('.book-container').attr('data-id');
@@ -39,11 +39,11 @@ var sammyApp = Sammy('#content', function() {
 
   });
 
-  this.get('#/login', function(context) {
-    $.get('app/partials/login-partial.html', function(html) {
+  this.get('#/login', function (context) {
+    $.get('app/partials/login-partial.html', function (html) {
       $('#content').html(html);
 
-      $('#login-form').on('submit', function() {
+      $('#login-form').on('submit', function () {
         var username = $('#username').val();
         var password = $('#password').val();
 
@@ -51,26 +51,27 @@ var sammyApp = Sammy('#content', function() {
             username: username,
             password: password
           })
-          .then(function(user) {
+          .then(function (user) {
             context.redirect('#/books');
             document.location.reload(true);
-          }, function(err) {
+          }, function (err) {
             alert(JSON.stringify(err));
           });
       });
 
-      $('#register').on('click', function() {
+      $('#register').on('click', function () {
+        console.log('HERE');
         context.redirect('#/register');
       });
 
     });
   });
 
-  this.get('#/register', function(context) {
-    $.get('app/partials/register-partial.html', function(html) {
+  this.get('#/register', function (context) {
+    $.get('app/partials/register-partial.html', function (html) {
       $('#content').html(html);
 
-      $('#register-form').on('submit', function() {
+      $('#register').on('click', function () {
         var username = $('#username').val();
         var password = $('#password').val();
         var confirmPassword = $('#confirm-password').val();
@@ -79,38 +80,38 @@ var sammyApp = Sammy('#content', function() {
         if (password !== confirmPassword) {
           $('.wrong-confirm-password').show();
           $('.wrong-confirm-password').parent().addClass('has-error');
-          return;
+          context.redirect('#/register');
         }
 
         if (!password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{4,})$/)) {
           $('.wrong-password').show();
           $('.wrong-password').parent().addClass('has-error');
-          return;
+          context.redirect('#/register');
         }
 
         data.users.register({
-          username: username,
-          password: password,
-          email: email
-        })
-        .then(function (user) {
-          context.redirect('#/login');
-        }, function (err) {
-          alert(JSON.stringify(err));
-        });
+            username: username,
+            password: password,
+            // email: email
+          })
+          .then(function (user) {
+            context.redirect('#/login');
+          }, function (err) {
+            alert(JSON.stringify(err));
+          });
       });
     });
   });
 
-  this.get('#/books/add', function(context) {
+  this.get('#/books/add', function (context) {
     //context === this
 
-    $.get('app/partials/book-add-partial.html', function(html) {
+    $.get('app/partials/book-add-partial.html', function (html) {
       // body...
       $('#content').html(html);
 
       var $button = $('#add-book')
-        .on('click', function() {
+        .on('click', function () {
           toastr.options.extendedTimeOut = 0;
           var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
           var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
@@ -119,7 +120,7 @@ var sammyApp = Sammy('#content', function() {
 
           if (validateTitle && validateAuthor && validateGenre && validateDescription) {
             var genres = [];
-            $('.tb-genre').each(function(index, genre) {
+            $('.tb-genre').each(function (index, genre) {
               var value = $(genre).val();
               if (value) {
                 genres.push(value);
@@ -133,7 +134,7 @@ var sammyApp = Sammy('#content', function() {
                 pages: $('#tb-pages').val(),
                 coverUrl: $('#tb-cover-url').val()
               })
-              .then(function(book) {
+              .then(function (book) {
                 toastr.clear();
                 toastr.success('Book added successfully!');
                 context.redirect('#/books/' + book._id);
@@ -141,14 +142,14 @@ var sammyApp = Sammy('#content', function() {
           }
         });
 
-      $(document).ready(function() {
+      $(document).ready(function () {
         $('#tb-cover').hide();
 
-        $('#tb-btn-preview').on('click', function() {
+        $('#tb-btn-preview').on('click', function () {
           var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
           if (validateUrl) {
             var $uploadButton = $('#tb-btn-preview')
-              .on('click', function() {
+              .on('click', function () {
                 var $imgURL = $('#tb-cover-url').val();
                 $('#tb-cover')
                   .attr('src', $imgURL)
@@ -169,25 +170,25 @@ var sammyApp = Sammy('#content', function() {
     });
   });
 
-  this.get('#/books/:id/edit', function(context) {
+  this.get('#/books/:id/edit', function (context) {
     var bookId = this.params.id;
     data.books.getById(bookId)
-      .then(function(book) {
-        $.get('app/partials/book-edit-partial.html', function(templateString) {
+      .then(function (book) {
+        $.get('app/partials/book-edit-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           var html = template(book);
           $('#content').html(html);
 
-          $(document).ready(function() {
+          $(document).ready(function () {
             $('#tb-cover').hide();
           });
 
           var $uploadButton = $('#tb-btn-preview')
-            .on('click', function() {
+            .on('click', function () {
               var validateUrl = validateInput($('#tb-cover-url'), 'Invalid cover Url');
               if (validateUrl) {
                 var $uploadButton = $('#tb-btn-preview')
-                  .on('click', function() {
+                  .on('click', function () {
                     var $imgURL = $('#tb-cover-url').val();
                     $('#tb-cover')
                       .attr('src', $imgURL)
@@ -198,7 +199,7 @@ var sammyApp = Sammy('#content', function() {
             });
 
           $('#save')
-            .on('click', function() {
+            .on('click', function () {
               toastr.options.extendedTimeOut = 0;
               var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
               var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
@@ -207,7 +208,7 @@ var sammyApp = Sammy('#content', function() {
 
               if (validateTitle && validateAuthor && validateGenre && validateDescription) {
                 var genres = [];
-                $('.tb-genre').each(function(index, genre) {
+                $('.tb-genre').each(function (index, genre) {
                   var value = $(genre).val();
                   if (value) {
                     genres.push(value);
@@ -223,7 +224,7 @@ var sammyApp = Sammy('#content', function() {
                     pages: $('#tb-pages').val(),
                     coverUrl: $('#tb-cover-url').val()
                   })
-                  .then(function(book) {
+                  .then(function (book) {
                     context.redirect('#/books/' + book._id);
                   });
                 toastr.clear();
@@ -244,12 +245,12 @@ var sammyApp = Sammy('#content', function() {
       });
   });
 
-  this.get('#/books/:id', function(context) {
+  this.get('#/books/:id', function (context) {
     var that = this;
     var bookId = this.params.id;
     data.books.getById(bookId)
-      .then(function(book) {
-        $.get('app/partials/book-id-partial.html', function(templateString) {
+      .then(function (book) {
+        $.get('app/partials/book-id-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           var html = template(book);
           $('#content').html(html);
@@ -258,7 +259,7 @@ var sammyApp = Sammy('#content', function() {
           // we need to reparse the sdk after the load
           FB.XFBML.parse();
 
-          $('.btn-change-status').on('click', function() {
+          $('.btn-change-status').on('click', function () {
             var $this = $(this);
             var status = $this.attr('data-status');
             var bookId = $this.parents('.book-container').attr('data-id');
@@ -269,12 +270,12 @@ var sammyApp = Sammy('#content', function() {
       });
   });
 
-  this.get('#/genres', function() {
+  this.get('#/genres', function () {
     var genre = this.params.genre;
     data.genres.get()
-      .then(function(genres) {
+      .then(function (genres) {
         var $container = $('<div />');
-        $.get('app/partials/genres-all-partial.html', function(templateString) {
+        $.get('app/partials/genres-all-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
 
           var html = template({
@@ -285,19 +286,19 @@ var sammyApp = Sammy('#content', function() {
       });
   });
 
-  this.get('#/mybooks', function() {
+  this.get('#/mybooks', function () {
     data.myBooks.get()
-      .then(function(books) {
+      .then(function (books) {
         var $container = $('<div />');
-        $.get('app/partials/book-id-partial.html', function(templateString) {
+        $.get('app/partials/book-id-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           books.map(template)
-            .forEach(function(bookhtml) {
+            .forEach(function (bookhtml) {
               $container.append(bookhtml);
             });
           $('#content').html($container.html());
 
-          $('.btn-change-status').on('click', function() {
+          $('.btn-change-status').on('click', function () {
             var $this = $(this);
             var status = $this.attr('data-status');
             var bookId = $this.parents('.book-container').attr('data-id');
@@ -309,7 +310,7 @@ var sammyApp = Sammy('#content', function() {
   });
 });
 
-$(function() {
+$(function () {
   sammyApp.run('#/');
 
   if (data.users.hasUser()) {
@@ -320,9 +321,9 @@ $(function() {
       .removeClass('hidden');
   }
 
-  $('#btn-nav-logout').on('click', function() {
+  $('#btn-nav-logout').on('click', function () {
     data.users.logout()
-      .then(function() {
+      .then(function () {
         document.location.reload(true);
       });
   });
@@ -332,9 +333,9 @@ $(function() {
 
 function loadGenresSidebar() {
   data.genres.get()
-    .then(function(genres) {
+    .then(function (genres) {
       var $container = $('<div />');
-      $.get('app/partials/genres-sidebar-partial.html', function(templateString) {
+      $.get('app/partials/genres-sidebar-partial.html', function (templateString) {
         var template = handlebars.compile(templateString);
 
         var html = template({
