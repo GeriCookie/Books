@@ -46,12 +46,15 @@ var myBooksController = function (User, Book, Update) {
         'read': 'booksRead'
       };
 
+      var newStatus = statusMap[obj.bookStatus];
+
       user[statusMap[obj.bookStatus]].push({
         id: book._id,
-        updateDate: new Date()
+        updateDate: new Date(),
+        status: newStatus
       });
 
-      var newStatus = statusMap[obj.bookStatus];
+
 
       User.update({
         _id: user._id
