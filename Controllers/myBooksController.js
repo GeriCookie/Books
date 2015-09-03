@@ -113,6 +113,14 @@ var myBooksController = function (User, Book, Update) {
       if (err) {
         throw err;
       }
+      // 
+      // books = books.map(function(book){
+      //   if(user.booksToRead.any(function(dbBook){
+      //     return dbBook.id === book.id;
+      //   })){
+      //     book.status = 'want-to-read';
+      //   }
+      // });
       res.json(books);
     });
   };
