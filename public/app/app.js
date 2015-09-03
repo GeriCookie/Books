@@ -9,7 +9,7 @@ var sammyApp = Sammy('#content', function () {
     console.log('----HOME');
   });
 
-  this.get('#/books', function () {
+  this.get('#/books', function (context) {
     var params = {
       author: this.params.author,
       genre: this.params.genre
@@ -27,11 +27,15 @@ var sammyApp = Sammy('#content', function () {
           $('#content').html($container.html());
 
           $('.btn-change-status').on('click', function () {
-            var $this = $(this);
-            var status = $this.attr('data-status');
-            var bookId = $this.parents('.book-container').attr('data-id');
-            console.log(bookId);
-            data.myBooks.changeStatus(bookId, status);
+            if (!data.users.hasUser()) {
+              context.redirect('#/login');
+            } else {
+              var $this = $(this);
+              var status = $this.attr('data-status');
+              var bookId = $this.parents('.book-container').attr('data-id');
+              console.log(bookId);
+              data.myBooks.changeStatus(bookId, status);
+            }
           });
         });
       });
@@ -115,33 +119,37 @@ var sammyApp = Sammy('#content', function () {
 
       var $button = $('#add-book')
         .on('click', function () {
-          toastr.options.extendedTimeOut = 0;
-          var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
-          var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
-          var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
-          var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
+          if (!data.users.hasUser()) {
+            context.redirect('#/login');
+          } else {
+            toastr.options.extendedTimeOut = 0;
+            var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
+            var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
+            var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
+            var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
 
-          if (validateTitle && validateAuthor && validateGenre && validateDescription) {
-            var genres = [];
-            $('.tb-genre').each(function (index, genre) {
-              var value = $(genre).val();
-              if (value) {
-                genres.push(value);
-              }
-            });
-            data.books.save({
-                title: $('#tb-title').val(),
-                author: $('#tb-author').val(),
-                genres: genres,
-                description: $('#tb-description').val(),
-                pages: $('#tb-pages').val(),
-                coverUrl: $('#tb-cover-url').val()
-              })
-              .then(function (book) {
-                toastr.clear();
-                toastr.success('Book added successfully!');
-                context.redirect('#/books/' + book._id);
+            if (validateTitle && validateAuthor && validateGenre && validateDescription) {
+              var genres = [];
+              $('.tb-genre').each(function (index, genre) {
+                var value = $(genre).val();
+                if (value) {
+                  genres.push(value);
+                }
               });
+              data.books.save({
+                  title: $('#tb-title').val(),
+                  author: $('#tb-author').val(),
+                  genres: genres,
+                  description: $('#tb-description').val(),
+                  pages: $('#tb-pages').val(),
+                  coverUrl: $('#tb-cover-url').val()
+                })
+                .then(function (book) {
+                  toastr.clear();
+                  toastr.success('Book added successfully!');
+                  context.redirect('#/books/' + book._id);
+                });
+            }
           }
         });
 
@@ -171,6 +179,36 @@ var sammyApp = Sammy('#content', function () {
         }
       }
     });
+  });
+
+  this.get('#/books/:id', function (context) {
+    var that = this;
+    var bookId = this.params.id;
+    data.books.getById(bookId)
+      .then(function (book) {
+        $.get('app/partials/book-id-partial.html', function (templateString) {
+          var template = handlebars.compile(templateString);
+          var html = template(book);
+          $('#content').html(html);
+
+          // because html adds the content after the sdk triggering
+          // we need to reparse the sdk after the load
+          FB.XFBML.parse();
+
+          $('.btn-change-status').on('click', function () {
+            if (!data.users.hasUser()) {
+              context.redirect('#/login');
+            } else {
+
+              var $this = $(this);
+              var status = $this.attr('data-status');
+              var bookId = $this.parents('.book-container').attr('data-id');
+              console.log(bookId);
+              data.myBooks.changeStatus(bookId, status);
+            }
+          });
+        });
+      });
   });
 
   this.get('#/books/:id/edit', function (context) {
@@ -203,35 +241,39 @@ var sammyApp = Sammy('#content', function () {
 
           $('#save')
             .on('click', function () {
-              toastr.options.extendedTimeOut = 0;
-              var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
-              var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
-              var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
-              var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
+              if (!data.users.hasUser()) {
+                context.redirect('#/login');
+              } else {
+                toastr.options.extendedTimeOut = 0;
+                var validateTitle = validateInput($('#tb-title'), 'Title is mandatory!');
+                var validateAuthor = validateInput($('#tb-author'), 'Author is mandatory!');
+                var validateGenre = validateInput($('#tb-genre1'), 'At least one genre is mandatory!');
+                var validateDescription = validateInput($('#tb-description'), 'Description is mandatory!');
 
-              if (validateTitle && validateAuthor && validateGenre && validateDescription) {
-                var genres = [];
-                $('.tb-genre').each(function (index, genre) {
-                  var value = $(genre).val();
-                  if (value) {
-                    genres.push(value);
-                  }
-                });
-                data.books.edit({
-                    id: bookId,
-                    title: $('#tb-title').val(),
-                    author: $('#tb-author').val(),
-                    genres: genres,
-                    rating: $('#tb-rating').val(),
-                    description: $('#tb-description').val(),
-                    pages: $('#tb-pages').val(),
-                    coverUrl: $('#tb-cover-url').val()
-                  })
-                  .then(function (book) {
-                    context.redirect('#/books/' + book._id);
+                if (validateTitle && validateAuthor && validateGenre && validateDescription) {
+                  var genres = [];
+                  $('.tb-genre').each(function (index, genre) {
+                    var value = $(genre).val();
+                    if (value) {
+                      genres.push(value);
+                    }
                   });
-                toastr.clear();
-                toastr.success('Book edited successfully!');
+                  data.books.edit({
+                      id: bookId,
+                      title: $('#tb-title').val(),
+                      author: $('#tb-author').val(),
+                      genres: genres,
+                      rating: $('#tb-rating').val(),
+                      description: $('#tb-description').val(),
+                      pages: $('#tb-pages').val(),
+                      coverUrl: $('#tb-cover-url').val()
+                    })
+                    .then(function (book) {
+                      context.redirect('#/books/' + book._id);
+                    });
+                  toastr.clear();
+                  toastr.success('Book edited successfully!');
+                }
               }
             });
 
@@ -248,30 +290,6 @@ var sammyApp = Sammy('#content', function () {
       });
   });
 
-  this.get('#/books/:id', function (context) {
-    var that = this;
-    var bookId = this.params.id;
-    data.books.getById(bookId)
-      .then(function (book) {
-        $.get('app/partials/book-id-partial.html', function (templateString) {
-          var template = handlebars.compile(templateString);
-          var html = template(book);
-          $('#content').html(html);
-
-          // because html adds the content after the sdk triggering
-          // we need to reparse the sdk after the load
-          FB.XFBML.parse();
-
-          $('.btn-change-status').on('click', function () {
-            var $this = $(this);
-            var status = $this.attr('data-status');
-            var bookId = $this.parents('.book-container').attr('data-id');
-            console.log(bookId);
-            data.myBooks.changeStatus(bookId, status);
-          });
-        });
-      });
-  });
 
   this.get('#/genres', function () {
     var genre = this.params.genre;
