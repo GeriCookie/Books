@@ -70,6 +70,11 @@ var routes = function (User, Book, Update) {
 						status: statusMaps[books[i].status]
 					});
 				}
+				resBooks.sort(function (b1, b2) {
+					var title1 = b1.title.toString(),
+						title2 = b2.title.toString();
+					return title1.localeCompare(title2);
+				});
 
 				res.json(resBooks);
 			});
