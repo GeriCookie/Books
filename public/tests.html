@@ -3,34 +3,19 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="bower_components/mocha/mocha.css">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 </head>
 <body>
 <div id="mocha"></div>
-<script src="bower_components/mocha/mocha.js"></script>
-<script src="bower_components/chai/chai.js"></script>
-<script src="bower_components/system.js/dist/system.js"></script>
-
+<script src="../node_modules/mocha/mocha.js"></script>
+<script src="../node_modules/chai/chai.js"></script>
 <script>
-    System.config({
-        transpiler: 'babel',
-        paths: {
-            '*': '*.js'
-        },
-        map: {
-            babel: './libs/browser.min.js',
-            toastr: 'bower_components/toastr/toastr'
-        }
-    });
-
-    System.import('tests')
-            .then(function() {
-                mocha.run();
-            }, function() {
-                console.log('error');
-            });
-
-
+    mocha.setup('bdd');
+    var expect = chai.expect;
 </script>
+<script src="../node_modules/systemjs/dist/system.js"></script>
+<script src="systemjs-tests-config.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/toastr/toastr.js"></script>
 </body>
 </html>

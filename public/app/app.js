@@ -27,7 +27,7 @@ var sammyApp = Sammy('#content', function () {
 });
 
 $(function () {
-  sammyApp.run('#/');
+  sammyApp.run('#/books');
 
   if (data.users.hasUser()) {
     $('#btn-nav-logout')
