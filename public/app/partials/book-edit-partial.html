@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="tb-title" class="col-sm-2 control-label">Title: </label>
     <div class="col-sm-6">
-      <input type="text" id="tb-title" class="form-control" placeholder="Title" value="{{title}}">
+      <input type="text" id="tb-title" class="form-control" placeholder="Title" value="{{{title}}}">
     </div>
   </div>
 
@@ -13,10 +13,10 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="tb-genre" class="col-sm-2">Genres:<label><br/>
-    <div clas="col-sm-6 form-group form-inline">
+    <label for="tb-genre" class="col-sm-2">Genres:</label>
+    <div class="col-sm-6 form-group form-inline">
       {{#each genres}}
-            <input type="text" class="form-control" class="tb-genre" placeholder="Genre" value="{{this}}">
+            <input type="text" class="form-control tb-genre" placeholder="Genre" value="{{this}}">
       {{/each}}
     </div>
   </div>
