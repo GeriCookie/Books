@@ -16,6 +16,7 @@ var myBooksController = function (User, Book, Update) {
       bookId: req.body.bookId,
       bookStatus: req.body.bookStatus
     };
+
     Book.findById(obj.bookId, function (err, book) {
       if (err) {
         // res.status(500).json(err);
@@ -32,7 +33,7 @@ var myBooksController = function (User, Book, Update) {
 
       ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function (name) {
         var index = user[name].findIndex(function (myBook) {
-          return myBook.id === book._id.toString();
+          return myBook._id === book._id.toString();
         });
         if (index >= 0) {
           user[name].splice(index, 1);

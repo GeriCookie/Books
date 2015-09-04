@@ -6,7 +6,7 @@ import toastr from 'toastr';
 var DEFAULT_COVER_URL = 'http://cdn.instructables.com/F1K/H87Q/GZUAFXDP/F1KH87QGZUAFXDP.MEDIUM.jpg';
 
 function registerUser(user) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = 'api/users';
     var pass = user.password;
     var passHash = CryptoJS.SHA1(pass).toString();
@@ -21,10 +21,10 @@ function registerUser(user) {
       method: 'POST',
       data: JSON.stringify(userSend),
       contentType: 'application/json',
-      success: function(user) {
+      success: function (user) {
         resolve(user);
       },
-      error: function(err) {
+      error: function (err) {
         resolve(err);
       }
     });
@@ -33,7 +33,7 @@ function registerUser(user) {
 }
 
 function loginUser(user) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = 'api/users/auth';
     var pass = user.password;
     var passHash = CryptoJS.SHA1(pass).toString();
@@ -50,7 +50,7 @@ function loginUser(user) {
       method: 'PUT',
       data: JSON.stringify(userSend),
       contentType: 'application/json',
-      success: function(user) {
+      success: function (user) {
         username = user.username;
         authKey = user.authKey;
         localStorage.setItem('username', username);
@@ -58,7 +58,7 @@ function loginUser(user) {
         console.log('in success');
         resolve(user);
       },
-      error: function(err) {
+      error: function (err) {
         console.log('in error');
         reject(err);
 
@@ -69,7 +69,7 @@ function loginUser(user) {
 }
 
 function logoutUser() {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     localStorage.removeItem('username');
     localStorage.removeItem('auth-key');
     resolve();
@@ -83,7 +83,7 @@ function hasUser() {
 
 function getUser(user) {
   var options = options || {},
-    promise = new Promise(function(resolve, reject) {
+    promise = new Promise(function (resolve, reject) {
       var url = '/api/users',
         queryParams = [],
         isFirst = true;
@@ -103,10 +103,10 @@ function getUser(user) {
       $.ajax({
         url: url,
         contentType: 'application/json',
-        success: function(users) {
+        success: function (users) {
           resolve(users);
         },
-        error: function(err) {
+        error: function (err) {
           reject(err);
         }
       });
@@ -115,16 +115,16 @@ function getUser(user) {
 }
 
 function getUserById(id) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = 'api/users/' + id;
 
     $.ajax({
       url: url,
       contentType: 'application/json',
-      success: function(user) {
+      success: function (user) {
         resolve(user);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
@@ -133,7 +133,7 @@ function getUserById(id) {
 }
 
 function editUser(user) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = '/api/users/' + user.id;
 
     $.ajax({
@@ -141,7 +141,7 @@ function editUser(user) {
       method: 'PUT',
       data: JSON.stringify(user),
       contentType: 'application/json',
-      success: function(user) {
+      success: function (user) {
         resolve(user);
       }
     });
@@ -161,7 +161,7 @@ function validateInput(tagId, errorMsg) {
 
 //books
 function saveBook(book) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = 'api/books';
 
     $.ajax({
@@ -169,10 +169,10 @@ function saveBook(book) {
       method: 'POST',
       data: JSON.stringify(book),
       contentType: 'application/json',
-      success: function(book) {
+      success: function (book) {
         resolve(book);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
@@ -186,7 +186,7 @@ function getBooks(options) {
   options.page = options.page || 1;
   options.size = options.size || 10;
 
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = '/api/books',
       queryParams = [],
       isFirst = true;
@@ -206,8 +206,8 @@ function getBooks(options) {
     $.ajax({
       url: url,
       contentType: 'application/json',
-      success: function(books) {
-        books = books.map(function(book) {
+      success: function (books) {
+        books = books.map(function (book) {
           if (!book.coverUrl) {
             book.coverUrl = DEFAULT_COVER_URL;
           }
@@ -215,7 +215,7 @@ function getBooks(options) {
         });
         resolve(books);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
@@ -224,15 +224,15 @@ function getBooks(options) {
 }
 
 function getBookById(id) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = '/api/books/' + id;
 
     $.ajax({
       url: url,
       method: 'GET',
       contentType: 'application/json',
-      success: function(book) {
-        if(!book.coverUrl){
+      success: function (book) {
+        if (!book.coverUrl) {
           book.coverUrl = DEFAULT_COVER_URL;
         }
         resolve(book);
@@ -243,14 +243,14 @@ function getBookById(id) {
 }
 
 function getGenres() {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     var url = '/api/genres';
 
     $.ajax({
       url: url,
       method: 'GET',
       contentType: 'application/json',
-      success: function(genres) {
+      success: function (genres) {
         resolve(genres);
       }
     });
@@ -259,7 +259,7 @@ function getGenres() {
 }
 
 function editBook(book) {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
 
     var url = '/api/books/' + book.id;
 
@@ -268,7 +268,7 @@ function editBook(book) {
       method: 'PUT',
       contentType: 'application/json',
       data: JSON.stringify(book),
-      success: function(resBook) {
+      success: function (resBook) {
         resolve(resBook);
       }
     });
@@ -281,7 +281,7 @@ function changeMyBookStatus(bookId, bookStatus) {
   var data = {
     bookId, bookStatus
   };
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     $.ajax({
       url: '/api/mybooks',
       method: 'PUT',
@@ -290,10 +290,10 @@ function changeMyBookStatus(bookId, bookStatus) {
       headers: {
         'x-auth-key': localStorage.getItem('auth-key')
       },
-      success: function(res) {
+      success: function (res) {
         resolve(res);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
@@ -302,7 +302,7 @@ function changeMyBookStatus(bookId, bookStatus) {
 }
 
 function getMyBooks() {
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     $.ajax({
       url: '/api/mybooks/all?noCaching=' + Math.random(),
       method: 'GET',
@@ -310,8 +310,8 @@ function getMyBooks() {
       headers: {
         'x-auth-key': localStorage.getItem('auth-key')
       },
-      success: function(books) {
-        books = books.map(function(book) {
+      success: function (books) {
+        books = books.map(function (book) {
           if (!book.coverUrl) {
             book.coverUrl = DEFAULT_COVER_URL;
           }
@@ -319,7 +319,7 @@ function getMyBooks() {
         });
         resolve(books);
       },
-      error: function(err) {
+      error: function (err) {
         reject(err);
       }
     });
