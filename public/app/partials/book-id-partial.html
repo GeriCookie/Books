@@ -12,16 +12,16 @@
   </div>
   <div class="row">
     <div class="col-md-5">
-      <img src="{{coverUrl}}" style="margin-top: 30px" alt="The book has no cover" width="250" height="350">
+      <img src="{{{coverUrl}}}" style="margin-top: 30px" alt="The book has no cover" width="250" height="350">
     </div>
     <div class="col-md-7">
-      <p>Author:<a href="#/books?author={{author}}" class="button">{{author}}</a></p>
+      <p>Author:<a href="#/books?author={{{author}}}" class="button">{{author}}</a></p>
 
       <p>Genres: {{#each genres}}
-        <a href="#/books?genre={{this}}" class="button">{{this}}</a> {{/each}}
+        <a href="#/books?genre={{{this}}}" class="button">{{{this}}}</a> {{/each}}
       </p>
       <p>Pages: {{pages}}</p>
-      <p>Description: {{description}} <a href="#/books/{{_id}}" class="button">more...</a></p>
+      <p>Description: {{{description}}} <a href="#/books/{{_id}}" class="button">more...</a></p>
 
       <button class="btn btn-primary btn-change-status" data-status="want-to-read">Want to read</button>
       <button class="btn btn-primary btn-change-status" data-status="currently-reading">Currently reading</button>
