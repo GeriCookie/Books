@@ -1,5 +1,5 @@
 <div class="book-container" data-id="{{_id}}">
-  <h2 class="book-title"><a href="#/books/{{_id}}" class="button">{{title}}</a>
+  <h2 class="book-title"><a href="#/books/{{_id}}" class="button">{{{title}}}</a>
     <small><a class="link-edit-book" href="#/books/{{_id}}/edit">Edit</a></small>
   </h2>
 
@@ -12,7 +12,7 @@
   </div>
   <div class="row">
     <div class="col-md-5">
-      <img src="{{coverUrl}}" alt="The book has no cover" width="300">
+      <img src="{{coverUrl}}" style="margin-top: 30px" alt="The book has no cover" width="250" height="350">
     </div>
     <div class="col-md-7">
       <p>Author:<a href="#/books?author={{author}}" class="button">{{author}}</a></p>

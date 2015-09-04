@@ -1,4 +1,4 @@
-import data from 'app/data/data';
+import data from 'app/data/data.js';
 
 mocha.setup('bdd');
 var expect = chai.expect;
@@ -24,7 +24,7 @@ describe('getBooks', function() {
                 done();
             });
     });
-})
+});
 
 describe('getUsers', function() {
     it('expect to have at least one user in database', function(done){
@@ -46,4 +46,4 @@ describe('getUsers', function() {
                 done();
             });
     });
-})
+});
