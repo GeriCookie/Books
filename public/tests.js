@@ -8,7 +8,7 @@ describe('getBooks', function() {
     it('expect to have at least one book in database', function(done){
         data.books.get()
             .then(function (books) {
-                expect(books).to.not.be.empty;
+                expect(books).not.to.be.empty;
                 done();
             });
     });

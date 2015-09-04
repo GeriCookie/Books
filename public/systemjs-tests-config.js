@@ -5,7 +5,7 @@ System.config({
     }
 });
 
-System.import('../tests/tests.js')
+System.import('tests.js')
     .then(function () {
         mocha.run();
     }, function (err) {
