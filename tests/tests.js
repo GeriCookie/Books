@@ -1,4 +1,4 @@
-import data from 'app/data/data.js';
+import data from '../public/app/data/data.js';
 
 mocha.setup('bdd');
 var expect = chai.expect;
