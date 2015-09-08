@@ -33,7 +33,7 @@ var myBooksController = function (User, Book, Update) {
 
       ['booksToRead', 'booksCurrentlyReading', 'booksRead'].forEach(function (name) {
         var index = user[name].findIndex(function (myBook) {
-          return myBook._id === book._id.toString();
+          return myBook._id.toString() === book._id.toString();
         });
         if (index >= 0) {
           user[name].splice(index, 1);
@@ -50,7 +50,7 @@ var myBooksController = function (User, Book, Update) {
       var newStatus = statusMap[obj.bookStatus];
 
       user[statusMap[obj.bookStatus]].push({
-        id: book._id,
+        _id: book._id,
         updateDate: new Date(),
         status: newStatus
       });
@@ -80,7 +80,7 @@ var myBooksController = function (User, Book, Update) {
             id: user._id
           },
           book: {
-            id: book.id,
+            _id: book.id,
             title: book.title,
             status: newStatus
           }

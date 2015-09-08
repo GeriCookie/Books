@@ -15,8 +15,8 @@ function all(context) {
           var booksTemplates = books.map(template);
           for (var i = 0; i < books.length; i += 1) {
             $container.append(booksTemplates[i]);
-            console.log(booksTemplates[i]);
-            var status = books[i].status;
+            //console.log(booksTemplates[i]);
+            // var status = books[i].status;
 
 
           }

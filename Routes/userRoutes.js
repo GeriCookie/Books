@@ -18,12 +18,12 @@ var routes = function (User) {
                 };
 
             User.findOne(query, function (err, user) {
-                console.log(user);
+                
                 if (err) {
                     throw err;
                 } else if (user === null) {
 
-                    console.log('Here must reload login page and clear inputs');
+                // console.log('Here must reload login page and clear inputs');
                     res.status(404).json({
                         message: 'Invalid username or password'
                     });

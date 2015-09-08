@@ -20,9 +20,9 @@ app.use('/', express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 
-app.use('/', function(req, res, next) {
+app.use('/', function (req, res, next) {
   var authKey = req.headers['x-auth-key'];
-  console.log(authKey);
+  //console.log(authKey);
   if (!authKey) {
     next();
     return;
@@ -30,16 +30,16 @@ app.use('/', function(req, res, next) {
   User.find({
       authKey: authKey
     })
-    .then(function(users) {
+    .then(function (users) {
       var user = users[0];
       req.user = user || null;
       next();
     });
 });
 
-app.get('/api/book-pages', function(req, res) {
+app.get('/api/book-pages', function (req, res) {
   var size = req.query.size || 10;
-  Book.find({}, function(err, books) {
+  Book.find({}, function (err, books) {
     if (err) {
       res.status(404).send(err);
     }
@@ -60,11 +60,11 @@ app.use('/api/users', userRouter);
 app.use('/api/mybooks', myBooksRouter);
 
 
-app.get('/api/genres', function(req, res) {
-  Book.find({}, function(err, books) {
+app.get('/api/genres', function (req, res) {
+  Book.find({}, function (err, books) {
     var genres = {};
-    books.forEach(function(book) {
-      book.genres.forEach(function(genre) {
+    books.forEach(function (book) {
+      book.genres.forEach(function (genre) {
         genres[genre] = true;
       });
 
@@ -74,7 +74,7 @@ app.get('/api/genres', function(req, res) {
   });
 });
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log('Running on PORT: ' + port);
 });
 

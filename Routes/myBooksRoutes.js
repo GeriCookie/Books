@@ -22,7 +22,7 @@ var routes = function (User, Book, Update) {
 			var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
 
 			var bookIds = books.map(function (book) {
-				return book.id;
+				return book._id;
 			});
 
 			Book.find({
@@ -35,8 +35,8 @@ var routes = function (User, Book, Update) {
 				}
 
 				books.sort(function (b1, b2) {
-					var id1 = b1.id.toString(),
-						id2 = b2.id.toString();
+					var id1 = b1._id.toString(),
+						id2 = b2._id.toString();
 					return id1.localeCompare(id2);
 				});
 
