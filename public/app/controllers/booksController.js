@@ -14,21 +14,22 @@ function all(context) {
   };
   var books;
   data.books.get(params)
-    .then(function(resBooks) {
+    .then(function (resBooks) {
       books = resBooks;
       return templates.get('book-id');
     })
-    .then(function(template) {
+    .then(function (template) {
       var $container = $('<div/>');
-      books.map(function(book) {
+      console.log(books);
+      books.map(function (book) {
           book.description = book.description.substr(0, 290);
           return book;
         })
         .map(template)
-        .forEach(function(bookhtml) {
+        .forEach(function (bookhtml) {
           $container.append(bookhtml);
         });
-      $.getJSON('api/book-pages', function(resp) {
+      $.getJSON('api/book-pages', function (resp) {
         var pages = resp.pages;
         var $pages = $('<div/>')
           .addClass('pages')
@@ -43,7 +44,7 @@ function all(context) {
         $('#content').html($container.html())
           .append($pages);
 
-        $('.btn-change-status').on('click', function() {
+        $('.btn-change-status').on('click', function () {
           if (!data.users.hasUser()) {
             context.redirect('#/login');
             return;
@@ -63,12 +64,12 @@ function add(context) {
     return;
   }
   templates.get('book-add')
-    .then(function(template) {
+    .then(function (template) {
 
       $('#content').html(template());
 
       $('#add-book')
-        .on('click', function() {
+        .on('click', function () {
           toastr.options.extendedTimeOut = 0;
           var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
           var validateAuthor = data.validation.validateInput($('#tb-author'), 'Author is mandatory!');
@@ -77,7 +78,7 @@ function add(context) {
 
           if (validateTitle && validateAuthor && validateGenre && validateDescription) {
             var genres = [];
-            $('.tb-genre').each(function(index, genre) {
+            $('.tb-genre').each(function (index, genre) {
               var value = $(genre).val();
               if (value) {
                 genres.push(value);
@@ -91,7 +92,7 @@ function add(context) {
                 pages: $('#tb-pages').val(),
                 coverUrl: $('#tb-cover-url').val()
               })
-              .then(function(book) {
+              .then(function (book) {
                 toastr.clear();
                 toastr.success('Book added successfully!');
                 context.redirect('#/books/' + book._id);
@@ -105,8 +106,8 @@ function byId(context) {
   var that = this;
   var bookId = this.params.id;
   data.books.getById(bookId)
-    .then(function(book) {
-      $.get('app/partials/book-details-partial.html', function(templateString) {
+    .then(function (book) {
+      $.get('app/partials/book-details-partial.html', function (templateString) {
         var template = handlebars.compile(templateString);
         var html = template(book);
         $('#content').html(html);
@@ -115,7 +116,7 @@ function byId(context) {
         // we need to reparse the sdk after the load
         FB.XFBML.parse();
 
-        $('.btn-change-status').on('click', function() {
+        $('.btn-change-status').on('click', function () {
           if (!data.users.hasUser()) {
             context.redirect('#/login');
           } else {
@@ -138,14 +139,14 @@ function edit(context) {
   } else {
     var bookId = this.params.id;
     data.books.getById(bookId)
-      .then(function(book) {
-        $.get('app/partials/book-edit-partial.html', function(templateString) {
+      .then(function (book) {
+        $.get('app/partials/book-edit-partial.html', function (templateString) {
           var template = handlebars.compile(templateString);
           var html = template(book);
           $('#content').html(html);
 
           $('#save')
-            .on('click', function() {
+            .on('click', function () {
               console.log('asd');
               toastr.options.extendedTimeOut = 0;
               var validateTitle = data.validation.validateInput($('#tb-title'), 'Title is mandatory!');
@@ -155,7 +156,7 @@ function edit(context) {
 
               if (validateTitle && validateAuthor && validateDescription) {
                 var genres = [];
-                $('.tb-genre').each(function(index, genre) {
+                $('.tb-genre').each(function (index, genre) {
                   var value = $(genre).val();
                   if (value) {
                     genres.push(value);
@@ -171,7 +172,7 @@ function edit(context) {
                     pages: $('#tb-pages').val(),
                     coverUrl: $('#tb-cover-url').val()
                   })
-                  .then(function(book) {
+                  .then(function (book) {
                     context.redirect('#/books/' + book._id);
                   });
                 toastr.clear();

@@ -2,8 +2,10 @@ var express = require('express'),
   bodyParser = require('body-parser');
 mongoose = require('mongoose');
 
+// db = mongoose.connect('mongodb://localhost/books');
 
-var db = mongoose.connect('mongodb://localhost/books');
+var db = mongoose.connect('mongodb://team:123456@ds059692.mongolab.com:59692/bookapi');
+
 
 var Book = require('./models/bookModel');
 var User = require('./models/userModel');
