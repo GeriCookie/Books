@@ -31,8 +31,9 @@ div p a:last-of-type:after {
   float: right;
 }
 .socialHeader {
-  line-height: 37px;
-  margin-right: 18%;
+  margin-left: 3%;
+  line-height: 27px;
+  margin-right: 8%;
 }
 .socialMargin {
   margin-bottom: 5px;

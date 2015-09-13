@@ -1,11 +1,13 @@
 import 'app/templates';
+
 function all(context) {
-  console.log('----HOME');
+	console.log('----HOME');
+	context.redirect('#/books');
 }
 
 export {
-  all
+	all
 };
 export default {
-  all
+	all
 };

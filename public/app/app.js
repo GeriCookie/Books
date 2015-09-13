@@ -8,7 +8,7 @@ import booksController from 'app/controllers/booksController';
 import usersController from 'app/controllers/usersController';
 import genresController from 'app/controllers/genresController';
 import mybooksController from 'app/controllers/mybooksController';
-
+import booksResultController from 'app/controllers/booksResultController';
 var sammyApp = Sammy('#content', function () {
 
   this.get('#/', homeController.all);
@@ -24,6 +24,7 @@ var sammyApp = Sammy('#content', function () {
   this.get('#/genres', genresController.all);
 
   this.get('#/mybooks', mybooksController.all);
+  this.get('#/books-result', booksResultController.all);
 });
 
 $(function () {
@@ -44,6 +45,12 @@ $(function () {
       .then(function () {
         document.location.reload(true);
       });
+  });
+
+  $('#btn-search').on('click', function () {
+    var pattern = $('#tb-search').val();
+
+    document.location = '#/books-result?pattern=' + pattern;
   });
 
   loadGenresSidebar();

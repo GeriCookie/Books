@@ -58,10 +58,12 @@ app.get('/api/book-pages', function (req, res) {
 var bookRouter = require('./Routes/bookRoutes')(Book);
 var userRouter = require('./Routes/userRoutes')(User);
 var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book, Update);
+var searchRouter = require('./Routes/searchRoutes')(Book);
 app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
 app.use('/api/users', userRouter);
 app.use('/api/mybooks', myBooksRouter);
+app.use('/api/search', searchRouter);
 
 
 app.get('/api/genres', function (req, res) {

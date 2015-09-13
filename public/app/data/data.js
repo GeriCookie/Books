@@ -223,6 +223,49 @@ function getBooks(options) {
   return promise;
 }
 
+function getSearchedBooks(options) {
+  options = options || {};
+  options.page = options.page || 1;
+  options.size = options.size || 10;
+
+  var promise = new Promise(function (resolve, reject) {
+    var url = '/api/search',
+      queryParams = [],
+      isFirst = true;
+    for (var key in options) {
+      if (typeof options[key] === 'undefined') {
+        continue;
+      }
+
+      var concatSymbol = '&';
+      if (isFirst) {
+        concatSymbol = '?';
+        isFirst = false;
+      }
+      url += `${concatSymbol}${key}=${options[key]}`;
+    }
+
+    $.ajax({
+      url: url,
+      contentType: 'application/json',
+      success: function (res) {
+        res.result.books = res.result.books.map(function (book) {
+          if (!book.coverUrl) {
+            book.coverUrl = DEFAULT_COVER_URL;
+          }
+          return book;
+        });
+        resolve(res);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
+
 function getBookById(id) {
   var promise = new Promise(function (resolve, reject) {
     var url = '/api/books/' + id;
@@ -331,7 +374,8 @@ var books = {
   get: getBooks,
   save: saveBook,
   getById: getBookById,
-  edit: editBook
+  edit: editBook,
+  getSearchedBooks: getSearchedBooks
 };
 
 var users = {
