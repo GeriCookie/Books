@@ -1,6 +1,7 @@
 var express = require('express'),
-  bodyParser = require('body-parser');
-mongoose = require('mongoose');
+  bodyParser = require('body-parser'),
+  mongoose = require('mongoose'),
+  cors = require('cors');
 
 // db = mongoose.connect('mongodb://localhost/books');
 
@@ -18,7 +19,7 @@ var port = process.env.PORT || 3000;
 //needed for the client to work
 //  serves public dir to localhost
 app.use('/', express.static(__dirname + '/public'));
-
+app.use(cors());
 
 app.use(bodyParser.json());
 
