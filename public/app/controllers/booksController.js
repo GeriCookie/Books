@@ -20,7 +20,7 @@ function all(context) {
     })
     .then(function (template) {
       var $container = $('<div/>');
-      console.log(books);
+
       books.map(function (book) {
           book.description = book.description.substr(0, 290);
           return book;

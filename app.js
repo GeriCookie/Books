@@ -12,7 +12,8 @@ var User = require('./models/userModel');
 var Update = require('./models/updateModel');
 var app = express();
 
-var port = 3000;
+var port = process.env.PORT || 3000;
+
 
 //needed for the client to work
 //  serves public dir to localhost
