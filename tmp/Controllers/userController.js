@@ -36,7 +36,7 @@ var userController = function (User) {
 					return authKey;
 				}(username))
 			});
-			console.log(user);
+
 			user.save(function (err, user) {
 				if (err) throw err;
 				res.status(201)

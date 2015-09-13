@@ -1,6 +1,10 @@
 import 'app/polyfills/array';
 import 'bower_components/sha1/index';
+import toastr from 'toastr';
 //users
+
+var DEFAULT_COVER_URL = 'http://cdn.instructables.com/F1K/H87Q/GZUAFXDP/F1KH87QGZUAFXDP.MEDIUM.jpg';
+
 function registerUser(user) {
   var promise = new Promise(function (resolve, reject) {
     var url = 'api/users';
@@ -62,6 +66,19 @@ function loginUser(user) {
     });
   });
   return promise;
+}
+
+function logoutUser() {
+  var promise = new Promise(function (resolve, reject) {
+    localStorage.removeItem('username');
+    localStorage.removeItem('auth-key');
+    resolve();
+  });
+  return promise;
+}
+
+function hasUser() {
+  return !!localStorage.getItem('auth-key');
 }
 
 function getUser(user) {
@@ -132,6 +149,15 @@ function editUser(user) {
   return promise;
 }
 
+//user validation
+function validateInput(tagId, errorMsg) {
+  if (tagId.val() === '' || tagId.val().trim() === '') {
+    toastr.error(errorMsg);
+    return false;
+  } else {
+    return true;
+  }
+}
 
 //books
 function saveBook(book) {
@@ -157,6 +183,8 @@ function saveBook(book) {
 //getBooks({genre: 'sci-fi', author: "...."})
 function getBooks(options) {
   options = options || {};
+  options.page = options.page || 1;
+  options.size = options.size || 10;
 
   var promise = new Promise(function (resolve, reject) {
     var url = '/api/books',
@@ -179,6 +207,12 @@ function getBooks(options) {
       url: url,
       contentType: 'application/json',
       success: function (books) {
+        books = books.map(function (book) {
+          if (!book.coverUrl) {
+            book.coverUrl = DEFAULT_COVER_URL;
+          }
+          return book;
+        });
         resolve(books);
       },
       error: function (err) {
@@ -198,6 +232,9 @@ function getBookById(id) {
       method: 'GET',
       contentType: 'application/json',
       success: function (book) {
+        if (!book.coverUrl) {
+          book.coverUrl = DEFAULT_COVER_URL;
+        }
         resolve(book);
       }
     });
@@ -240,6 +277,56 @@ function editBook(book) {
   return promise;
 }
 
+function changeMyBookStatus(bookId, bookStatus) {
+  var data = {
+    bookId, bookStatus
+  };
+  var promise = new Promise(function (resolve, reject) {
+    $.ajax({
+      url: '/api/mybooks',
+      method: 'PUT',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      headers: {
+        'x-auth-key': localStorage.getItem('auth-key')
+      },
+      success: function (res) {
+        resolve(res);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
+function getMyBooks() {
+  var promise = new Promise(function (resolve, reject) {
+    $.ajax({
+      url: '/api/mybooks/all?noCaching=' + Math.random(),
+      method: 'GET',
+      contentType: 'application/json',
+      headers: {
+        'x-auth-key': localStorage.getItem('auth-key')
+      },
+      success: function (books) {
+        books = books.map(function (book) {
+          if (!book.coverUrl) {
+            book.coverUrl = DEFAULT_COVER_URL;
+          }
+          return book;
+        });
+        resolve(books);
+      },
+      error: function (err) {
+        reject(err);
+      }
+    });
+  });
+  return promise;
+}
+
 var books = {
   get: getBooks,
   save: saveBook,
@@ -251,21 +338,37 @@ var users = {
   get: getUser,
   register: registerUser,
   login: loginUser,
+  logout: logoutUser,
+  hasUser: hasUser,
   getById: getUserById,
   edit: editUser
+};
+
+var myBooks = {
+  changeStatus: changeMyBookStatus,
+  get: getMyBooks
 };
 
 var genres = {
   get: getGenres
 };
+
+var validation = {
+  validateInput: validateInput
+};
+
 export {
   books,
   genres,
-  users
+  users,
+  myBooks,
+  validation
 };
 
 export default {
   books,
   genres,
-  users
+  users,
+  myBooks,
+  validation
 };

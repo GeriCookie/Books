@@ -1,7 +1,0 @@
-div p a:after {
-    content: ',';
-}
-
-div p a:last-of-type:after {
-    content: '';
-}

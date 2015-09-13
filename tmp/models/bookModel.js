@@ -25,6 +25,9 @@ var bookModel = new Schema({
 	},
 	pages: {
 		type: Number
+	},
+	coverUrl: {
+		type: String
 	}
 });
 
