@@ -18,7 +18,6 @@ var myBooksController = function (User, Book, Update) {
       bookId: req.body.bookId,
       bookStatus: req.body.bookStatus
     };
-
     Book.findById(obj.bookId, function (err, book) {
       if (err) {
         // res.status(500).json(err);
@@ -90,7 +89,7 @@ var myBooksController = function (User, Book, Update) {
 
         newUpdate.save(function (err, update) {
 
-          res.json(true);
+          res.json(update);
         });
 
       });
@@ -109,7 +108,7 @@ var myBooksController = function (User, Book, Update) {
     var books = user.booksToRead.concat(user.booksCurrentlyReading).concat(user.booksRead);
 
     var bookIds = books.map(function (book) {
-      return book.id;
+      return book._id;
     });
     Book.find({
       _id: {
