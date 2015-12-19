@@ -78,6 +78,8 @@ var routes = function (User, Book, Update) {
 
 				res.json(resBooks);
 			});
+			//WTF???????????
+			//res.json(books);
 		});
 
 	myBooksRouter.route('/to-read')
@@ -94,7 +96,7 @@ var routes = function (User, Book, Update) {
 			var books = user.booksToRead;
 
 			var bookIds = books.map(function (book) {
-				return book.id;
+				return book._id;
 			});
 
 			Book.find({
@@ -107,6 +109,7 @@ var routes = function (User, Book, Update) {
 				}
 				res.json(books);
 			});
+			//res.json(books);
 		});
 
 	myBooksRouter.route('/currently-reading')
@@ -123,7 +126,7 @@ var routes = function (User, Book, Update) {
 			var books = user.booksCurrentlyReading;
 
 			var bookIds = books.map(function (book) {
-				return book.id;
+				return book._id;
 			});
 
 			Book.find({
@@ -136,6 +139,7 @@ var routes = function (User, Book, Update) {
 				}
 				res.json(books);
 			});
+			//res.json(books);
 		});
 
 
@@ -153,7 +157,7 @@ var routes = function (User, Book, Update) {
 			var books = user.booksRead;
 
 			var bookIds = books.map(function (book) {
-				return book.id;
+				return book._id;
 			});
 
 			Book.find({
@@ -166,8 +170,194 @@ var routes = function (User, Book, Update) {
 				}
 				res.json(books);
 			});
+			//res.json(books);
 		});
 
+
+	myBooksRouter.route('/review')
+		.put(function (req, res) {
+			var user = req.user;
+			if (!user) {
+				res.status(401);
+				res.json({
+					message: 'Unathorized user'
+				});
+				return;
+			}
+			var rating = req.body.rating | 0;
+			if (isNaN(rating) || rating < 1 || 5 < rating) {
+				res.status(404);
+				res.json({
+					message: 'Invalid rating'
+				});
+				return;
+			}
+
+			var review = req.body.review;
+
+			var bookId = req.body.bookId;
+			if (!bookId) {
+				res.status(404);
+				res.json({
+					message: "Invalid book"
+				});
+				return;
+			}
+
+			Book.findById(bookId, function (err, book) {
+				if (err) {
+					throw err;
+				}
+				if (!book) {
+					res.status(404).json({
+						message: 'No book found'
+					});
+					return;
+				}
+
+				if (!book.rating) {
+					book.ratings = [];
+				}
+				var index = book.ratings.findIndex(function (userRating) {
+					return userRating.userId.toString() === user._id.toString();
+				});
+				if (index >= 0) {
+					book.ratings[index].rating = rating;
+				} else {
+					book.ratings.push({
+						userId: user._id,
+						rating: rating
+					});
+				}
+
+				if (!book.reviews) {
+					book.reviews = [];
+				}
+				var indexOfReview = book.reviews.findIndex(function (userReview) {
+					return userReview.userId.toString() === user._id.toString();
+				});
+				if (indexOfReview >= 0) {
+					book.reviews[indexOfReview].review = review;
+				} else {
+					book.reviews.push({
+						userId: user._id,
+						review: review
+					});
+				}
+
+
+
+				book.save(function () {
+					var newUpdate = new Update({
+						text: user.username + ' added review for ' + book.title,
+						date: new Date(),
+						user: {
+							username: user.username,
+							id: user._id
+						},
+						book: {
+							_id: book.id,
+							title: book.title,
+						},
+						review: review,
+						rating: rating
+					});
+
+					newUpdate.save(function (err, update) {
+
+						res.json({
+							result: book
+						});
+					});
+
+				});
+			});
+		});
+
+	myBooksRouter.route('/progress')
+		.put(function (req, res) {
+			var user = req.user;
+			if (!user) {
+				res.status(401);
+				res.json({
+					message: 'Unathorized user'
+				});
+				return;
+			}
+
+			var review = req.body.review;
+			var progress = req.body.progress;
+			var bookId = req.body.bookId;
+			if (!bookId) {
+				res.status(404);
+				res.json({
+					message: "Invalid book"
+				});
+				return;
+			}
+
+			Book.findById(bookId, function (err, book) {
+				if (err) {
+					throw err;
+				}
+				if (!book) {
+					res.status(404).json({
+						message: 'No book found'
+					});
+					return;
+				}
+
+				if (!book.reviews) {
+					book.reviews = [];
+				}
+				var indexOfReview = book.reviews.findIndex(function (userReview) {
+					return userReview.userId.toString() === user._id.toString();
+				});
+				if (indexOfReview >= 0) {
+					book.reviews[indexOfReview].review = review;
+				} else {
+					book.reviews.push({
+						userId: user._id,
+						review: review
+					});
+				}
+
+				if (!book.progresses) {
+					book.progresses = [];
+				}
+				book.progresses.push({
+					userId: user._id,
+					progress: progress,
+					dateOfProgress: new Date()
+				});
+
+
+				book.save(function () {
+					var newUpdate = new Update({
+						text: user.username + ' updated reading progress of ' + book.title,
+						date: new Date(),
+						user: {
+							username: user.username,
+							id: user._id
+						},
+						book: {
+							_id: book.id,
+							title: book.title,
+						},
+						review: review,
+						progress: progress
+					});
+
+					newUpdate.save(function (err, update) {
+
+						res.json({
+							result: book
+						});
+					});
+
+				});
+			});
+		});
 
 
 	return myBooksRouter;

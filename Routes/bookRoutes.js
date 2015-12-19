@@ -1,6 +1,6 @@
 var express = require('express');
 
-var routes = function(Book) {
+var routes = function (Book) {
   var bookRouter = express.Router();
 
   var bookController = require('../Controllers/bookController')(Book);
@@ -9,8 +9,8 @@ var routes = function(Book) {
     .post(bookController.post)
     .get(bookController.get);
 
-  bookRouter.use('/:bookId', function(req, res, next) {
-    Book.findById(req.params.bookId, function(err, book) {
+  bookRouter.use('/:bookId', function (req, res, next) {
+    Book.findById(req.params.bookId, function (err, book) {
       if (err) {
         res.status(500).send(err);
       } else if (book) {
@@ -23,7 +23,7 @@ var routes = function(Book) {
   });
 
   bookRouter.route('/:bookId')
-    .get(function(req, res) {
+    .get(function (req, res) {
       var returnBook = req.book.toJSON();
 
       returnBook.links = {};
@@ -32,23 +32,84 @@ var routes = function(Book) {
       res.json(returnBook);
 
     })
-    .put(function(req, res) {
-      if (req.body._id) {
-        delete req.body._id;
+    .put(function (req, res) {
+      var user = req.user;
+
+      if (!user) {
+        res.status(401);
+        res.json({
+          message: 'Unauthorized user'
+        });
+        return;
       }
-      for (var p in req.body) {
-        req.book[p] = req.body[p];
+
+      var rating = req.body.rating | 0;
+      if (isNaN(rating) || rating < 1 || 5 < rating) {
+        res.status(404);
+        res.json({
+          message: 'Invalid rating'
+        });
+        return;
       }
-      req.book.save(function(err) {
+
+      var bookId = req.body.bookId;
+      if (!bookId) {
+        res.status(404);
+        res.json({
+          message: 'Invalid book'
+        });
+        return;
+      }
+
+      Book.findById(bookId, function (err, book) {
         if (err) {
-          res.status(500).send(err);
-        } else {
-          res.json(req.book);
+          // res.status(500).json(err);
+          throw err;
         }
+        if (!book) {
+          res.status(404).json({
+            message: 'No book found'
+          });
+          return;
+        }
+
+        if (!book.rating) {
+          book.ratings = [];
+        }
+        var index = book.ratings.findIndex(function (userRating) {
+          return userRating.userId == user._id;
+        });
+        if (index >= 0) {
+          book.ratings[index].rating = rating;
+        } else {
+          book.ratings.push({
+            userId: user._id,
+            rating: rating
+          });
+        }
+
+        book.save(function () {
+          var newUpdate = new Update({
+            text: user.username + ' rated ' + book.title,
+            date: new Date(),
+            user: {
+              username: user.username,
+              id: user._id
+            },
+            book: {
+              _id: book.id,
+              title: book.title,
+            },
+            rating: rating
+          });
+          res.json({
+            result: book
+          });
+        });
       });
     })
-    .delete(function(req, res) {
-      req.book.remove(function(err) {
+    .delete(function (req, res) {
+      req.book.remove(function (err) {
         if (err) {
           res.status(500).send(err);
         } else {

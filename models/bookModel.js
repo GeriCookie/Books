@@ -11,8 +11,8 @@ var bookModel = new Schema({
 	genres: {
 		type: [String]
 	},
-	rating: {
-		type: Number
+	ratings: {
+		type: [Schema.Types.Mixed]
 	},
 	description: {
 		type: String
@@ -28,7 +28,14 @@ var bookModel = new Schema({
 	},
 	coverUrl: {
 		type: String
+	},
+	progresses: {
+		type: [Schema.Types.Mixed]
+	},
+	comments: {
+		type: [Schema.Types.Mixed]
 	}
+
 });
 
 module.exports = mongoose.model('Book', bookModel);

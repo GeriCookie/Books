@@ -59,12 +59,13 @@ var bookRouter = require('./Routes/bookRoutes')(Book);
 var userRouter = require('./Routes/userRoutes')(User);
 var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book, Update);
 var searchRouter = require('./Routes/searchRoutes')(Book);
+var updateRouter = require('./Routes/updateRoutes')(User, Book, Update);
 app.use('/api/books', bookRouter);
 app.use('/api/authors', bookRouter);
 app.use('/api/users', userRouter);
 app.use('/api/mybooks', myBooksRouter);
 app.use('/api/search', searchRouter);
-
+app.use('/api/updates', updateRouter);
 
 app.get('/api/genres', function (req, res) {
   Book.find({}, function (err, books) {

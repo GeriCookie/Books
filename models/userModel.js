@@ -23,6 +23,7 @@ var userModel = new Schema({
 	booksRead: {
 		type: [Schema.Types.Mixed]
 	}
+
 });
 
 module.exports = mongoose.model('User', userModel);
