@@ -5,8 +5,9 @@
   const MIN_RATING = 1;
   const MAX_RATING = 5;
 
-  var bookController = function (Book) {
+  var bookController = function (Book, Update) {
     var post = function (req, res) {
+      var user = req.user;
       var book = new Book(req.body);
 
       if (!req.body.title) {

@@ -55,7 +55,7 @@ app.get('/api/book-pages', function (req, res) {
   });
 });
 
-var bookRouter = require('./Routes/bookRoutes')(Book);
+var bookRouter = require('./Routes/bookRoutes')(Book, Update);
 var userRouter = require('./Routes/userRoutes')(User);
 var myBooksRouter = require('./Routes/myBooksRoutes')(User, Book, Update);
 var searchRouter = require('./Routes/searchRoutes')(Book);
