@@ -226,6 +226,7 @@ var routes = function (User, Book, Update) {
 				} else {
 					book.ratings.push({
 						userId: user._id,
+						username: user.username,
 						rating: rating
 					});
 				}
@@ -233,17 +234,12 @@ var routes = function (User, Book, Update) {
 				if (!book.reviews) {
 					book.reviews = [];
 				}
-				var indexOfReview = book.reviews.findIndex(function (userReview) {
-					return userReview.userId.toString() === user._id.toString();
+
+				book.reviews.push({
+					userId: user._id,
+					username: user.username,
+					review: review
 				});
-				if (indexOfReview >= 0) {
-					book.reviews[indexOfReview].review = review;
-				} else {
-					book.reviews.push({
-						userId: user._id,
-						review: review
-					});
-				}
 
 
 
@@ -318,6 +314,7 @@ var routes = function (User, Book, Update) {
 				} else {
 					book.reviews.push({
 						userId: user._id,
+						username: user.username,
 						review: review
 					});
 				}

@@ -29,7 +29,29 @@ var routes = function (Book, Update) {
       returnBook.links = {};
       var newLink = 'http://' + req.headers.host + '/api/books/?genre=' + returnBook.genre;
       returnBook.links.FilterByThisGenre = newLink.replace(' ', '%20');
-      res.json(returnBook);
+      returnBook = [returnBook].map(function (book) {
+        var rating = 0;
+        if (book.ratings) {
+          var totalRatingsSum = book.ratings.reduce(function (s, userRating) {
+            return s + userRating.rating;
+          }, 0);
+          rating = totalRatingsSum / book.ratings.length;
+        }
+
+        return {
+          _id: book._id,
+          title: book.title,
+          rating: rating,
+          author: book.author,
+          genres: book.genres,
+          description: book.description,
+          reviews: book.reviews,
+          imageURL: book.imageURL,
+          coverUrl: book.coverUrl,
+          pages: book.pages
+        };
+      });
+      res.json(returnBook[0]);
 
     })
     .put(function (req, res) {
